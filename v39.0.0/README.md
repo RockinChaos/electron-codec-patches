@@ -17,13 +17,14 @@ Every patched Electron version includes an archived [README](#-previous-versions
 | 🍎 **macOS** | x64 | Node 22.20.0 • Xcode 26.0.1 • MetalToolChain • Python ≥ 3.9 |
 | 🍎 **macOS** | arm64 | Node 22.20.0 • Xcode 26.0.1 • MetalToolChain • Python ≥ 3.9 |
 
-> **📝 Note for macOS:** You may need to launch Xcode settings, navigate to Components, and remove/reinstall MetalToolChain if issues arise.
+> [!NOTE]
+> **macOS:** You may need to launch Xcode settings, navigate to Components, and remove/reinstall MetalToolChain if issues arise.
 
 ---
 
 ### 📚 Previous Versions
 
-- **Electron v39.0.0** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/v39.0.0)
+- **Electron v39.0.0** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v39.0.0)
 
 ---
 
@@ -35,14 +36,16 @@ Every patched Electron version includes an archived [README](#-previous-versions
 
 Before building Electron, you must install the required system dependencies for your operating system. These dependencies vary by platform and are essential for a successful build.
 
-> **🔴 IMPORTANT:** Use the **Build Requirements** listed in the [Supported Versions](#-supported-versions) table above. These are the **tested and verified versions** for this patch. While the Electron documentation provides general prerequisites, the specific versions listed above are required for compatibility with these patches.
+> [!IMPORTANT]
+> Use the **Build Requirements** listed in the [Supported Versions](#-supported-versions) table above. These are the **tested and verified versions** for this patch. While the Electron documentation provides general prerequisites, the specific versions listed above are required for compatibility with these patches.
 
 **📖 Refer to the official Electron documentation for your OS:**
 - [Windows Build Prerequisites](https://www.electronjs.org/docs/latest/development/build-instructions-windows)
 - [Linux Build Prerequisites](https://www.electronjs.org/docs/latest/development/build-instructions-linux)
 - [macOS Build Prerequisites](https://www.electronjs.org/docs/latest/development/build-instructions-macos)
 
-> **💡 Important:** Make sure all system dependencies are installed before proceeding with the steps below.
+> [!CAUTION]
+> Make sure all system dependencies are installed before proceeding with the steps below.
 
 ---
 
@@ -57,28 +60,23 @@ git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 
 **🐧 Linux & 🍎 macOS:**
 ```bash
-cd depot_tools
-export PATH="`pwd`:$PATH"
-cd ..
+export PATH="`pwd`/depot_tools:$PATH"
 ```
 
 **🪟 Windows:**
 
 **Command Prompt:**
 ```cmd
-cd depot_tools
-set PATH=%cd%;%PATH%
-cd ..
+set PATH=%cd%\depot_tools;%PATH%
 ```
 
 **PowerShell:**
 ```powershell
-cd depot_tools
-$env:Path = "$(Get-Location);$env:Path"
-cd ..
+$env:Path = "$(Get-Location)\depot_tools;$env:Path"
 ```
 
-> **💡 Tip:** This adds depot_tools to your PATH for the current session. To make this permanent, see the [Optional: Permanent Environment Variables](#-optional-permanent-environment-variables) section.
+> [!TIP]
+> This adds depot_tools to your PATH for the current session. To make this permanent, see the [Optional: Permanent Environment Variables](#%EF%B8%8F-optional-permanent-environment-variables) section.
 
 #### Windows-Specific Setup
 Set the environment variable `DEPOT_TOOLS_WIN_TOOLCHAIN=0`:
@@ -178,7 +176,8 @@ cd src
 $env:CHROMIUM_BUILDTOOLS_PATH = "$(Get-Location)\buildtools"
 ```
 
-> **💡 Tip:** See the [Optional: Permanent Environment Variables](#-optional-permanent-environment-variables) section to save these permanently.
+> [!TIP]
+> See the [Optional: Permanent Environment Variables](#%EF%B8%8F-optional-permanent-environment-variables) section to save these permanently.
 
 ---
 
@@ -200,9 +199,11 @@ gn gen out/Release --args="import(\"//electron/build/args/release.gn\")"
 gn gen out/Release --args="import(\"//electron/build/args/release.gn\") target_cpu=\"arm64\""
 ```
 
-> **✅ Tested:** macOS x64 → arm64 cross-compilation has been successfully tested and is recommended.
->
-> **⚠️ Note:** Cross-compiling from arm64 → x64 is not well-supported and not recommended.
+> [!NOTE]
+> macOS x64 → arm64 cross-compilation has been successfully tested and is recommended.
+
+> [!WARNING]
+> Cross-compiling from arm64 → x64 is not well-supported and not recommended.
 
 #### 🪟 Windows
 
@@ -216,7 +217,8 @@ gn gen out/Release --args="import(\"//electron/build/args/release.gn\")"
 gn gen out/Release --args="import(\`"//electron/build/args/release.gn\`")"
 ```
 
-> **⚠️ Cross-OS Compilation:** Cross-compiling for Linux or Windows from other operating systems is technically possible but **not tested or recommended**. Building natively on the target OS is strongly preferred for stability and compatibility.
+> [!WARNING]
+> **Cross-OS Compilation:** Cross-compiling for Linux or Windows from other operating systems is technically possible but **not tested or recommended**. Building natively on the target OS is strongly preferred for stability and compatibility.
 
 ---
 
@@ -228,8 +230,9 @@ ninja -C out/Release electron
 ```
 
 > ⏰ **Expect this to take significant time depending on your hardware!**
->
-> **💡 Performance Tip:** You can use the `-j` flag to control parallel build jobs and reduce system load. For example, `ninja -j 4 -C out/Release electron` will use only 4 parallel jobs instead of all available CPU cores. This is useful if you need to use your computer for other tasks during the build. Without the `-j` flag, ninja will automatically use all available CPU cores for maximum build speed.
+
+> [!TIP]
+> **Performance:** You can use the `-j` flag to control parallel build jobs and reduce system load. For example, `ninja -j 4 -C out/Release electron` will use only 4 parallel jobs instead of all available CPU cores. This is useful if you need to use your computer for other tasks during the build. Without the `-j` flag, ninja will automatically use all available CPU cores for maximum build speed.
 
 ---
 
@@ -265,7 +268,8 @@ git checkout v$VERSION
 gclient sync -f
 ```
 
-> **💡 Tip:** After resetting and updating, repeat steps 5-9 to apply patches and rebuild.
+> [!TIP]
+> After resetting and updating, repeat steps 5-9 to apply patches and rebuild.
 
 ---
 
@@ -345,7 +349,8 @@ Save and reload:
 . $PROFILE
 ```
 
-> **📝 Note:** Replace `/path/to/` or `C:\path\to\` with your actual installation paths.
+> [!NOTE]
+> Replace `/path/to/` or `C:\path\to\` with your actual installation paths.
 
 ---
 
