@@ -258,6 +258,9 @@ cd src/electron/ && git reset --hard HEAD && git clean -df
 cd src/third_party/ffmpeg/ && git reset --hard HEAD && git clean -df
 ```
 
+> [!IMPORTANT]
+> Before updating to a new version, ensure you have the correct dependencies installed for that version. Check the **Build Requirements** in the [Supported Versions](#-supported-versions) section for the target Electron version and update Node, Python, Xcode, or other dependencies as needed.
+
 ### Update to New Version
 ```bash
 cd src/electron
@@ -268,7 +271,6 @@ git checkout v$VERSION
 gclient sync -f
 ```
 
-> [!TIP]
 > After resetting and updating, repeat steps 5-9 to apply patches and rebuild.
 
 ---
