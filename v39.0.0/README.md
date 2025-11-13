@@ -8,7 +8,10 @@ Electron patches enabling **HEVC**, **AC3**, and **E-AC3** codec support for med
 
 Every patched Electron version includes an archived [README](#-previous-versions) documenting the exact build steps and environment used during patch creation.
 
-### ✅ Electron [v39.0.0](https://releases.electronjs.org/release/v39.0.0)
+### ✅ Electron [v39.0.0](https://releases.electronjs.org/release/v39.0.0) → [v39.1.2](https://releases.electronjs.org/release/v39.1.2)
+
+**Patch Version:** [v39.0.0](https://releases.electronjs.org/release/v39.0.0)  
+**Tested Range:** v39.0.0 – v39.1.2
 
 | Platform | Architecture | Build Requirements |
 |----------|-------------|-------------------|
@@ -24,7 +27,7 @@ Every patched Electron version includes an archived [README](#-previous-versions
 
 ### 📚 Previous Versions
 
-- **Electron v39.0.0** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v39.0.0)
+- **Electron v39.0.0 - v39.1.2** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v39.0.0)
 
 ---
 
