@@ -1,6 +1,6 @@
 # 🎬 Electron Codec Patches
 
-Electron patches enabling **HEVC**, **AC3**, and **E-AC3** codec support for media playback.
+Electron patches enabling **HEVC**, **DTS**, **AC3**, and **E-AC3** codec support for media playback.
 
 ---
 
@@ -10,7 +10,7 @@ Every patched Electron version includes an archived [README](#-previous-versions
 
 ### ✅ Electron [v39.0.0](https://releases.electronjs.org/release/v39.0.0) → [v39.1.2](https://releases.electronjs.org/release/v39.1.2)
 
-**Patch Version:** [v39.0.0](https://releases.electronjs.org/release/v39.0.0)  
+**Patch Version:** v39.0.0  
 **Tested Range:** v39.0.0 – v39.1.2
 
 | Platform | Architecture | Build Requirements |
