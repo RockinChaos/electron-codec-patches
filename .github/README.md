@@ -134,25 +134,25 @@ gclient sync -f
 ### 5️⃣ Apply the Patches
 
 #### File Placement
-- Move `chromium-hevc-ac3.patch` → `src/`
-- Move `electron-hevc-ac3.patch` → `src/electron/`
-- Move `ffmpeg-hevc-ac3.patch` → `src/third_party/ffmpeg/`
+- Move `chromium-hevc-hd-audio.patch` → `src/`
+- Move `electron-hevc-hd-audio.patch` → `src/electron/`
+- Move `ffmpeg-hevc-hd-audio.patch` → `src/third_party/ffmpeg/`
 
 #### Apply Each Patch
 ```bash
 # Apply Chromium patch
 cd src
-git apply chromium-hevc-ac3.patch
+git apply chromium-hevc-hd-audio.patch
 ```
 ```bash
 # Apply Electron patch
 cd src/electron
-git apply electron-hevc-ac3.patch
+git apply electron-hevc-hd-audio.patch
 ```
 ```bash
 # Apply FFmpeg patch
 cd src/third_party/ffmpeg
-git apply ffmpeg-hevc-ac3.patch
+git apply ffmpeg-hevc-hd-audio.patch
 ```
 
 ---
