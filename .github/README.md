@@ -1,6 +1,6 @@
 # 🎬 Electron Codec Patches
 
-Electron patches enabling **HEVC**, **DTS**, **AC3**, and **E-AC3** codec support for media playback.
+Electron patches enabling **HEVC**, **DTS**, **AC3**, **E-AC3**, **TrueHD**, and **MLP** codec support for media playback.
 
 ---
 

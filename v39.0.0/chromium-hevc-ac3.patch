@@ -11,10 +11,21 @@ index 4433777ae40e0..52646153e72ea 100644
 +-media/utils/
 \ No newline at end of file
 diff --git a/media/base/audio_codecs.cc b/media/base/audio_codecs.cc
-index 73f3d287cc990..0ca263702f331 100644
+index 73f3d287cc990..84a874d31eb68 100644
 --- a/media/base/audio_codecs.cc
 +++ b/media/base/audio_codecs.cc
-@@ -93,7 +93,7 @@ AudioCodec StringToAudioCodec(const std::string& codec_id) {
+@@ -60,6 +60,10 @@ std::string GetCodecName(AudioCodec codec) {
+       return "dtse";
+     case AudioCodec::kAC4:
+       return "ac4";
++    case AudioCodec::kTRUEHD:
++      return "truehd";
++    case AudioCodec::kMLP:
++      return "mlp";
+   }
+ }
+ 
+@@ -93,9 +97,13 @@ AudioCodec StringToAudioCodec(const std::string& codec_id) {
    if (codec_id == "dtse" || codec_id == "mp4a.AC" || codec_id == "mp4a.ac") {
      return AudioCodec::kDTSE;
    }
@@ -22,12 +33,109 @@ index 73f3d287cc990..0ca263702f331 100644
 +  if (codec_id == "dtsx" || codec_id == "dtsx-p2" || codec_id == "mp4a.B2" || codec_id == "mp4a.b2") {
      return AudioCodec::kDTSXP2;
    }
++  if (codec_id == "truehd" || codec_id == "thd")
++    return AudioCodec::kTRUEHD;
++  if (codec_id == "mlp")
++    return AudioCodec::kMLP;
    if (codec_id == "mp3" || codec_id == "mp4a.69" || codec_id == "mp4a.6B")
+     return AudioCodec::kMP3;
+   if (codec_id == "alac")
+diff --git a/media/base/audio_codecs.h b/media/base/audio_codecs.h
+index 8e3710b51977f..b60286cd73829 100644
+--- a/media/base/audio_codecs.h
++++ b/media/base/audio_codecs.h
+@@ -41,13 +41,15 @@ enum class AudioCodec {
+   kDTSE = 20,
+   kAC4 = 21,
+   kIAMF = 22,
++  kTRUEHD = 23,
++  kMLP = 24,
+   // DO NOT ADD RANDOM AUDIO CODECS!
+   //
+   // The only acceptable time to add a new codec is if there is production code
+   // that uses said codec in the same CL.
+ 
+   // Must always be equal to the largest entry ever logged.
+-  kMaxValue = kIAMF,
++  kMaxValue = kMLP,
+ };
+ 
+ enum class AudioCodecProfile {
+diff --git a/media/base/mime_util_internal.cc b/media/base/mime_util_internal.cc
+index 3682c4d5b52e0..0a601dc0dd937 100644
+--- a/media/base/mime_util_internal.cc
++++ b/media/base/mime_util_internal.cc
+@@ -104,6 +104,9 @@ const StringToCodecMap& GetStringToCodecMap() {
+       {"ac-4", MimeUtil::AC4},
+       {"mp4a.ae", MimeUtil::AC4},
+       {"mp4a.AE", MimeUtil::AC4},
++      {"thd", MimeUtil::TRUEHD},
++      {"truehd", MimeUtil::TRUEHD},
++      {"mlp", MimeUtil::MLP},
+   });
+ 
+   return *kStringToCodecMap;
+@@ -189,6 +192,10 @@ AudioCodec MimeUtilToAudioCodec(MimeUtil::Codec codec) {
+       return AudioCodec::kAC4;
+     case MimeUtil::IAMF:
+       return AudioCodec::kIAMF;
++    case MimeUtil::TRUEHD:
++      return AudioCodec::kTRUEHD;
++    case MimeUtil::MLP:
++      return AudioCodec::kMLP;
+     default:
+       break;
+   }
+@@ -363,6 +370,9 @@ void MimeUtil::AddSupportedMediaFormats() {
+   mp4_audio_codecs.emplace(IAMF);
+ #endif  // BUILDFLAG(ENABLE_PLATFORM_IAMF_AUDIO)
+ 
++  mp4_audio_codecs.emplace(TRUEHD);
++  mp4_audio_codecs.emplace(MLP);
++
+   CodecSet mp4_codecs(mp4_audio_codecs);
+   mp4_codecs.insert(mp4_video_codecs.begin(), mp4_video_codecs.end());
+ 
+@@ -647,6 +657,10 @@ bool MimeUtil::IsCodecSupportedOnAndroid(Codec codec,
+       return false;
+ #endif
+ 
++    case TRUEHD:
++    case MLP:
++      return true;
++
+     case AC4:
+     case IAMF:
+       return false;
+diff --git a/media/base/mime_util_internal.h b/media/base/mime_util_internal.h
+index cb26a95da5b36..0dc611fd53bd7 100644
+--- a/media/base/mime_util_internal.h
++++ b/media/base/mime_util_internal.h
+@@ -55,7 +55,9 @@ class MEDIA_EXPORT MimeUtil {
+     DTSE,
+     AC4,
+     IAMF,
+-    LAST_CODEC = IAMF
++    TRUEHD,
++    MLP,
++    LAST_CODEC = MLP
+   };
+ 
+   // Platform configuration structure.  Controls which codecs are supported at
 diff --git a/media/base/supported_types.cc b/media/base/supported_types.cc
-index 24d1355fac575..8a7166de632bc 100644
+index 24d1355fac575..c6ece12dc02ce 100644
 --- a/media/base/supported_types.cc
 +++ b/media/base/supported_types.cc
-@@ -228,25 +228,7 @@ bool IsAudioCodecProprietary(AudioCodec codec) {
+@@ -209,6 +209,8 @@ bool IsAudioCodecProprietary(AudioCodec codec) {
+     case AudioCodec::kDTSXP2:
+     case AudioCodec::kDTSE:
+     case AudioCodec::kAC4:
++    case AudioCodec::kTRUEHD:
++    case AudioCodec::kMLP:
+       return true;
+ 
+     case AudioCodec::kFLAC:
+@@ -228,25 +230,7 @@ bool IsAudioCodecProprietary(AudioCodec codec) {
  #endif  // !BUILDFLAG(USE_PROPRIETARY_CODECS)
  
  bool IsDecoderHevcProfileSupported(const VideoType& type) {
@@ -53,7 +161,16 @@ index 24d1355fac575..8a7166de632bc 100644
  }
  
  bool IsDecoderVp9ProfileSupported(const VideoType& type) {
-@@ -579,7 +561,7 @@ bool IsEncoderOptionalVideoType(const media::VideoType& type) {
+@@ -489,6 +473,8 @@ bool IsDefaultDecoderSupportedAudioType(const AudioType& type) {
+     case AudioCodec::kPCM_S24BE:
+     case AudioCodec::kPCM_ALAW:
+     case AudioCodec::kVorbis:
++    case AudioCodec::kTRUEHD:
++    case AudioCodec::kMLP:
+       return true;
+     case AudioCodec::kAMR_NB:
+     case AudioCodec::kAMR_WB:
+@@ -579,7 +565,7 @@ bool IsEncoderOptionalVideoType(const media::VideoType& type) {
  
  bool IsDecoderBuiltInVideoCodec(VideoCodec codec) {
  #if BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS) && BUILDFLAG(USE_PROPRIETARY_CODECS)
@@ -63,7 +180,7 @@ index 24d1355fac575..8a7166de632bc 100644
    }
  #endif  // BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS) &&
 diff --git a/media/ffmpeg/ffmpeg_common.cc b/media/ffmpeg/ffmpeg_common.cc
-index bcbb74fd56852..82ab4e98261e3 100644
+index bcbb74fd56852..a1220e1f33b51 100644
 --- a/media/ffmpeg/ffmpeg_common.cc
 +++ b/media/ffmpeg/ffmpeg_common.cc
 @@ -64,7 +64,7 @@ VideoColorSpace GetGuessedColorSpace(const VideoColorSpace& color_space) {
@@ -75,18 +192,22 @@ index bcbb74fd56852..82ab4e98261e3 100644
  #else
    return "";
  #endif
-@@ -181,6 +181,10 @@ AudioCodec CodecIDToAudioCodec(AVCodecID codec_id) {
-       return AudioCodec::kAC3;
+@@ -182,6 +182,14 @@ AudioCodec CodecIDToAudioCodec(AVCodecID codec_id) {
      case AV_CODEC_ID_EAC3:
        return AudioCodec::kEAC3;
-+#endif
+ #endif
 +#if BUILDFLAG(ENABLE_PLATFORM_DTS_AUDIO)
 +    case AV_CODEC_ID_DTS:
 +      return AudioCodec::kDTS;
- #endif
++#endif
++    case AV_CODEC_ID_TRUEHD:
++      return AudioCodec::kTRUEHD;
++    case AV_CODEC_ID_MLP:
++      return AudioCodec::kMLP;
      case AV_CODEC_ID_MP3:
        return AudioCodec::kMP3;
-@@ -221,6 +225,14 @@ AVCodecID AudioCodecToCodecID(AudioCodec audio_codec,
+     case AV_CODEC_ID_VORBIS:
+@@ -221,6 +229,18 @@ AVCodecID AudioCodecToCodecID(AudioCodec audio_codec,
    switch (audio_codec) {
      case AudioCodec::kAAC:
        return AV_CODEC_ID_AAC;
@@ -98,20 +219,24 @@ index bcbb74fd56852..82ab4e98261e3 100644
 +    case AudioCodec::kDTSE:
 +    case AudioCodec::kDTSXP2:
 +      return AV_CODEC_ID_DTS;
++    case AudioCodec::kTRUEHD:
++      return AV_CODEC_ID_TRUEHD;
++    case AudioCodec::kMLP:
++      return AV_CODEC_ID_MLP;
      case AudioCodec::kALAC:
        return AV_CODEC_ID_ALAC;
      case AudioCodec::kMP3:
-@@ -1055,7 +1067,7 @@ int32_t HashCodecName(const char* codec_name) {
-
+@@ -1055,7 +1075,7 @@ int32_t HashCodecName(const char* codec_name) {
+ 
  const char* GetAllowedAudioDecoders() {
  #if BUILDFLAG(USE_PROPRIETARY_CODECS)
 -#define EXTRA_CODECS ",aac"
-+#define EXTRA_CODECS ",aac,ac3,eac3,dca"
++#define EXTRA_CODECS ",aac,ac3,eac3,dca,truehd,mlp"
  #else
  #define EXTRA_CODECS
  #endif
 diff --git a/media/ffmpeg/scripts/build_ffmpeg.py b/media/ffmpeg/scripts/build_ffmpeg.py
-index 9ef6ba9afc2d3..2dd6379445b41 100755
+index 9ef6ba9afc2d3..293d91eb393d9 100755
 --- a/media/ffmpeg/scripts/build_ffmpeg.py
 +++ b/media/ffmpeg/scripts/build_ffmpeg.py
 @@ -1001,9 +1001,9 @@ def ConfigureAndBuild(target_arch, target_os, host_os, host_arch,
@@ -121,21 +246,21 @@ index 9ef6ba9afc2d3..2dd6379445b41 100755
 -        '--enable-decoder=aac,h264',
 -        '--enable-demuxer=aac',
 -        '--enable-parser=aac,h264',
-+        '--enable-decoder=aac,h264,mp3,eac3,ac3,hevc,mpeg4,mpegvideo,mp2,mp1,flac,dca',
-+        '--enable-demuxer=aac,mp3,mov,dtshd,dts,avi,mpegvideo,m4v,h264,vc1,flac',
-+        '--enable-parser=aac,h264,mpegaudio,mpeg4video,mpegvideo,ac3,h261,vc1,h263,flac,dca',
++        '--enable-decoder=aac,h264,mp3,eac3,ac3,hevc,mpeg4,mpegvideo,mp2,mp1,flac,dca,mlp',
++        '--enable-demuxer=aac,mp3,mov,dtshd,dts,avi,mpegvideo,m4v,h264,vc1,flac,truehd,mlp',
++        '--enable-parser=aac,h264,mpegaudio,mpeg4video,mpegvideo,ac3,h261,vc1,h263,flac,dca,mlp',
      ])
  
      configure_flags['ChromeAndroid'].extend([
 diff --git a/media/filters/ffmpeg_video_decoder.cc b/media/filters/ffmpeg_video_decoder.cc
-index fef13f6b8ab58..fde72949969b4 100644
+index fef13f6b8ab58..b41d1ff0de52f 100644
 --- a/media/filters/ffmpeg_video_decoder.cc
 +++ b/media/filters/ffmpeg_video_decoder.cc
 @@ -71,6 +71,8 @@ static int GetFFmpegVideoDecoderThreadCount(const VideoDecoderConfig& config) {
    // Only add more threads for those codecs that we know will benefit.
    switch (config.codec()) {
      case VideoCodec::kUnknown:
-+	  // We do not compile ffmpeg with support for any of these codecs.
++      // We do not compile ffmpeg with support for any of these codecs.
 +      NOTREACHED();
      case VideoCodec::kVC1:
      case VideoCodec::kMPEG2:
