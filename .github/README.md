@@ -8,10 +8,10 @@ Electron patches enabling **HEVC**, **DTS**, **AC3**, **E-AC3**, **TrueHD**, and
 
 Every patched Electron version includes an archived [README](#-previous-versions) documenting the exact build steps and environment used during patch creation.
 
-### ✅ Electron [v39.0.0](https://releases.electronjs.org/release/v39.0.0) → [v39.2.7](https://releases.electronjs.org/release/v39.2.7)
+### ✅ Electron [v39.0.0](https://releases.electronjs.org/release/v39.0.0) → [v39.8.7](https://releases.electronjs.org/release/v39.8.7)
 
 **Patch Version:** v39.0.0  
-**Tested Range:** v39.0.0 – v39.2.7
+**Tested Range:** v39.0.0 – v39.8.7
 
 | Platform | Architecture | Build Requirements |
 |----------|-------------|-------------------|
@@ -27,7 +27,7 @@ Every patched Electron version includes an archived [README](#-previous-versions
 
 ### 📚 Previous Versions
 
-- **Electron v39.0.0 - v39.2.7** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v39.0.0)
+- **Electron v39.0.0 - v39.8.7** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v39.0.0)
 
 ---
 
