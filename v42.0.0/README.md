@@ -6,8 +6,6 @@ Electron patches enabling **HEVC**, **DTS**, **AC3**, **E-AC3**, **TrueHD**, and
 
 ## 📦 Supported Versions
 
-Every patched Electron version includes an archived [README](#-previous-versions) documenting the exact build steps and environment used during patch creation.
-
 ### ✅ Electron [v42.0.0](https://releases.electronjs.org/release/v42.0.0) → [v42.3.0](https://releases.electronjs.org/release/v42.3.0)
 
 **Patch Version:** v42.0.0  
@@ -22,12 +20,6 @@ Every patched Electron version includes an archived [README](#-previous-versions
 
 > [!NOTE]
 > **macOS:** You may need to launch Xcode settings, navigate to Components, and remove/reinstall MetalToolChain if issues arise.
-
----
-
-### 📚 Previous Versions
-
-- **Electron v39.0.0 - v39.8.10** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v39.0.0)
 
 ---
 

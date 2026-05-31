@@ -1,0 +1,493 @@
+diff --git a/build/config/unsafe_buffers_paths.txt b/build/config/unsafe_buffers_paths.txt
+index ec12fe9208233..3f23bcae9c229 100644
+--- a/build/config/unsafe_buffers_paths.txt
++++ b/build/config/unsafe_buffers_paths.txt
+@@ -31,3 +31,8 @@ $../../
+ +third_party/liburlpattern/
+ -tools/
+ -v8/
++-media/base/
++-media/audio/
++-media/filters/
++-media/formats/
++-media/utils/
+diff --git a/media/base/audio_codecs.cc b/media/base/audio_codecs.cc
+index 76605830cc0d3..efd408c5787d5 100644
+--- a/media/base/audio_codecs.cc
++++ b/media/base/audio_codecs.cc
+@@ -60,6 +60,10 @@ std::string GetCodecName(AudioCodec codec) {
+       return "dtse";
+     case AudioCodec::kAC4:
+       return "ac4";
++    case AudioCodec::kTRUEHD:
++      return "truehd";
++    case AudioCodec::kMLP:
++      return "mlp";
+   }
+ }
+ 
+@@ -93,9 +97,13 @@ AudioCodec StringToAudioCodec(const std::string& codec_id) {
+   if (codec_id == "dtse" || codec_id == "mp4a.AC" || codec_id == "mp4a.ac") {
+     return AudioCodec::kDTSE;
+   }
+-  if (codec_id == "dtsx" || codec_id == "mp4a.B2" || codec_id == "mp4a.b2") {
++  if (codec_id == "dtsx" || codec_id == "dtsx-p2" || codec_id == "mp4a.B2" || codec_id == "mp4a.b2") {
+     return AudioCodec::kDTSXP2;
+   }
++  if (codec_id == "truehd" || codec_id == "thd")
++    return AudioCodec::kTRUEHD;
++  if (codec_id == "mlp")
++    return AudioCodec::kMLP;
+   if (codec_id == "mp3" || codec_id == "mp4a.69" || codec_id == "mp4a.6B")
+     return AudioCodec::kMP3;
+   if (codec_id == "alac")
+diff --git a/media/base/audio_codecs.h b/media/base/audio_codecs.h
+index fea308401c64e..175602e2f9715 100644
+--- a/media/base/audio_codecs.h
++++ b/media/base/audio_codecs.h
+@@ -43,13 +43,15 @@ enum class AudioCodec {
+   kDTSE = 20,
+   kAC4 = 21,
+   kIAMF = 22,
++  kTRUEHD = 23,
++  kMLP = 24,
+   // DO NOT ADD RANDOM AUDIO CODECS!
+   //
+   // The only acceptable time to add a new codec is if there is production code
+   // that uses said codec in the same CL.
+ 
+   // Must always be equal to the largest entry ever logged.
+-  kMaxValue = kIAMF,
++  kMaxValue = kMLP,
+ };
+ 
+ enum class AudioCodecProfile {
+diff --git a/media/base/mime_util_internal.cc b/media/base/mime_util_internal.cc
+index 14b0010db2f35..9030cb7e1a216 100644
+--- a/media/base/mime_util_internal.cc
++++ b/media/base/mime_util_internal.cc
+@@ -104,6 +104,9 @@ const StringToCodecMap& GetStringToCodecMap() {
+       {"ac-4", MimeUtil::AC4},
+       {"mp4a.ae", MimeUtil::AC4},
+       {"mp4a.AE", MimeUtil::AC4},
++      {"thd", MimeUtil::TRUEHD},
++      {"truehd", MimeUtil::TRUEHD},
++      {"mlp", MimeUtil::MLP},
+   });
+ 
+   return *kStringToCodecMap;
+@@ -189,6 +192,10 @@ AudioCodec MimeUtilToAudioCodec(MimeUtil::Codec codec) {
+       return AudioCodec::kAC4;
+     case MimeUtil::IAMF:
+       return AudioCodec::kIAMF;
++    case MimeUtil::TRUEHD:
++      return AudioCodec::kTRUEHD;
++    case MimeUtil::MLP:
++      return AudioCodec::kMLP;
+     default:
+       break;
+   }
+@@ -381,6 +388,9 @@ void MimeUtil::AddSupportedMediaFormats() {
+   mp4_audio_codecs.emplace(IAMF);
+ #endif  // BUILDFLAG(ENABLE_PLATFORM_IAMF_AUDIO)
+ 
++  mp4_audio_codecs.emplace(TRUEHD);
++  mp4_audio_codecs.emplace(MLP);
++
+   CodecSet mp4_codecs(mp4_audio_codecs);
+   mp4_codecs.insert(mp4_video_codecs.begin(), mp4_video_codecs.end());
+ 
+@@ -661,6 +671,10 @@ bool MimeUtil::IsCodecSupportedOnAndroid(Codec codec,
+       return false;
+ #endif
+ 
++    case TRUEHD:
++    case MLP:
++      return true;
++
+     case AC4:
+     case IAMF:
+       return false;
+diff --git a/media/base/mime_util_internal.h b/media/base/mime_util_internal.h
+index cb26a95da5b36..0dc611fd53bd7 100644
+--- a/media/base/mime_util_internal.h
++++ b/media/base/mime_util_internal.h
+@@ -55,7 +55,9 @@ class MEDIA_EXPORT MimeUtil {
+     DTSE,
+     AC4,
+     IAMF,
+-    LAST_CODEC = IAMF
++    TRUEHD,
++    MLP,
++    LAST_CODEC = MLP
+   };
+ 
+   // Platform configuration structure.  Controls which codecs are supported at
+diff --git a/media/base/supported_types.cc b/media/base/supported_types.cc
+index 117bb7eb6d499..c751646f450d8 100644
+--- a/media/base/supported_types.cc
++++ b/media/base/supported_types.cc
+@@ -210,6 +210,8 @@ bool IsAudioCodecProprietary(AudioCodec codec) {
+     case AudioCodec::kDTSXP2:
+     case AudioCodec::kDTSE:
+     case AudioCodec::kAC4:
++    case AudioCodec::kTRUEHD:
++    case AudioCodec::kMLP:
+       return true;
+ 
+     case AudioCodec::kFLAC:
+@@ -229,25 +231,7 @@ bool IsAudioCodecProprietary(AudioCodec codec) {
+ #endif  // !BUILDFLAG(USE_PROPRIETARY_CODECS)
+ 
+ bool IsDecoderHevcProfileSupported(const VideoType& type) {
+-  if (!IsDecoderColorSpaceSupported(type.color_space)) {
+-    return false;
+-  }
+-
+-#if BUILDFLAG(ENABLE_PLATFORM_HEVC)
+-#if BUILDFLAG(PLATFORM_HAS_OPTIONAL_HEVC_DECODE_SUPPORT)
+-#if BUILDFLAG(IS_CHROMEOS)
+-  if (!base::FeatureList::IsEnabled(kPlatformHEVCDecoderSupport)) {
+-    return false;
+-  }
+-#endif  // BUILDFLAG(IS_CHROMEOS)
+-  return GetSupplementalDecoderVideoProfileCache()->IsProfileSupported(
+-      type.profile);
+-#else
+   return true;
+-#endif  // BUIDFLAG(PLATFORM_HAS_OPTIONAL_HEVC_DECODE_SUPPORT)
+-#else
+-  return false;
+-#endif  // BUILDFLAG(ENABLE_PLATFORM_HEVC)
+ }
+ 
+ bool IsDecoderVp9ProfileSupported(const VideoType& type) {
+@@ -490,6 +474,8 @@ bool IsDefaultDecoderSupportedAudioType(const AudioType& type) {
+     case AudioCodec::kPCM_S24BE:
+     case AudioCodec::kPCM_ALAW:
+     case AudioCodec::kVorbis:
++    case AudioCodec::kTRUEHD:
++    case AudioCodec::kMLP:
+       return true;
+     case AudioCodec::kAMR_NB:
+     case AudioCodec::kAMR_WB:
+@@ -579,7 +565,7 @@ bool IsEncoderOptionalVideoType(const media::VideoType& type) {
+ 
+ bool IsDecoderBuiltInVideoCodec(VideoCodec codec) {
+ #if BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS) && BUILDFLAG(USE_PROPRIETARY_CODECS)
+-  if (codec == VideoCodec::kH264) {
++  if (codec == VideoCodec::kH264 || codec == VideoCodec::kHEVC) {
+     return true;
+   }
+ #endif  // BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS) &&
+diff --git a/media/ffmpeg/ffmpeg_common.cc b/media/ffmpeg/ffmpeg_common.cc
+index 043513a51bb80..75300016bef9a 100644
+--- a/media/ffmpeg/ffmpeg_common.cc
++++ b/media/ffmpeg/ffmpeg_common.cc
+@@ -69,7 +69,7 @@ VideoColorSpace GetGuessedColorSpace(const VideoColorSpace& color_space) {
+ const char* GetAllowedVideoDecoders() {
+   // This should match the configured lists in //third_party/ffmpeg.
+ #if BUILDFLAG(USE_PROPRIETARY_CODECS) && BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS)
+-  return "h264";
++  return "h264,hevc";
+ #else
+   return "";
+ #endif
+@@ -163,6 +163,14 @@ AudioCodec CodecIDToAudioCodec(AVCodecID codec_id) {
+     case AV_CODEC_ID_EAC3:
+       return AudioCodec::kEAC3;
+ #endif
++#if BUILDFLAG(ENABLE_PLATFORM_DTS_AUDIO)
++    case AV_CODEC_ID_DTS:
++      return AudioCodec::kDTS;
++#endif
++    case AV_CODEC_ID_TRUEHD:
++      return AudioCodec::kTRUEHD;
++    case AV_CODEC_ID_MLP:
++      return AudioCodec::kMLP;
+     case AV_CODEC_ID_MP3:
+       return AudioCodec::kMP3;
+     case AV_CODEC_ID_VORBIS:
+@@ -202,6 +210,18 @@ AVCodecID AudioCodecToCodecID(AudioCodec audio_codec,
+   switch (audio_codec) {
+     case AudioCodec::kAAC:
+       return AV_CODEC_ID_AAC;
++    case AudioCodec::kAC3:
++      return AV_CODEC_ID_AC3;
++    case AudioCodec::kEAC3:
++      return AV_CODEC_ID_EAC3;
++    case AudioCodec::kDTS:
++    case AudioCodec::kDTSE:
++    case AudioCodec::kDTSXP2:
++      return AV_CODEC_ID_DTS;
++    case AudioCodec::kTRUEHD:
++      return AV_CODEC_ID_TRUEHD;
++    case AudioCodec::kMLP:
++      return AV_CODEC_ID_MLP;
+     case AudioCodec::kALAC:
+       return AV_CODEC_ID_ALAC;
+     case AudioCodec::kMP3:
+@@ -1078,7 +1098,7 @@ int32_t HashCodecName(const char* codec_name) {
+ 
+ const char* GetAllowedAudioDecoders() {
+ #if BUILDFLAG(USE_PROPRIETARY_CODECS)
+-#define EXTRA_CODECS ",aac"
++#define EXTRA_CODECS ",aac,ac3,eac3,dca,truehd,mlp"
+ #else
+ #define EXTRA_CODECS
+ #endif
+diff --git a/media/ffmpeg/scripts/build_ffmpeg.py b/media/ffmpeg/scripts/build_ffmpeg.py
+index e3da8ef626ed2..b167ad67f9076 100755
+--- a/media/ffmpeg/scripts/build_ffmpeg.py
++++ b/media/ffmpeg/scripts/build_ffmpeg.py
+@@ -982,9 +982,9 @@ def ConfigureAndBuild(target_arch, target_os, host_os, host_arch,
+ 
+     # Google Chrome specific configuration.
+     configure_flags['Chrome'].extend([
+-        '--enable-decoder=aac,h264',
+-        '--enable-demuxer=aac',
+-        '--enable-parser=aac,h264',
++        '--enable-decoder=aac,h264,mp3,eac3,ac3,hevc,mpeg4,mpegvideo,mp2,mp1,flac,dca,mlp',
++        '--enable-demuxer=aac,mp3,mov,dtshd,dts,avi,mpegvideo,m4v,h264,vc1,flac,truehd,mlp',
++        '--enable-parser=aac,h264,mpegaudio,mpeg4video,mpegvideo,ac3,h261,vc1,h263,flac,dca,mlp',
+     ])
+ 
+     configure_flags['ChromeAndroid'].extend([
+diff --git a/media/filters/ffmpeg_audio_decoder.cc b/media/filters/ffmpeg_audio_decoder.cc
+index 36f2786ac1c18..2858e2b64b2c6 100644
+--- a/media/filters/ffmpeg_audio_decoder.cc
++++ b/media/filters/ffmpeg_audio_decoder.cc
+@@ -174,6 +174,7 @@ void FFmpegAudioDecoder::Reset(base::OnceClosure closure) {
+   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
+   avcodec_flush_buffers(codec_context_.get());
++  FlushTrueHDBuffer();
+   state_ = DecoderState::kNormal;
+   ResetTimestampState(config_);
+
+@@ -184,6 +185,11 @@ void FFmpegAudioDecoder::Reset(base::OnceClosure closure) {
+   }
+ }
+
++void FFmpegAudioDecoder::FlushTrueHDBuffer() {
++  truehd_buffer_.clear();
++  truehd_buffer_pts_ = INT64_MIN;
++}
++
+ void FFmpegAudioDecoder::DecodeBuffer(const DecoderBuffer& buffer,
+                                       DecodeCB decode_cb) {
+   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+@@ -233,6 +239,51 @@ bool FFmpegAudioDecoder::FFmpegDecode(const DecoderBuffer& buffer) {
+     DCHECK_GT(packet->size, 0);
+   }
+
++  // Some MKV muxers (mkvmerge v95 and earlier) store TrueHD/MLP audio as
++  // individual subframes per MKV block rather than grouped major sync frames.
++  // FFmpeg requires a complete major sync frame (identified by the sync word
++  // 0xF8726FBA at bytes 4-7) before it can decode anything. We accumulate
++  // subframes until the next sync boundary, then flush as one packet.
++  if ((config_.codec() == AudioCodec::kTRUEHD ||
++       config_.codec() == AudioCodec::kMLP) &&
++      packet->data && packet->size > 0) {
++
++    // The TrueHD major sync word is always at bytes 4-7 of a sync frame,
++    // as defined by the TrueHD/MLP bitstream spec.
++    static constexpr uint8_t kTrueHDSyncWord[] = {0xF8, 0x72, 0x6F, 0xBA};
++    const bool has_sync = packet->size >= 8 &&
++                          memcmp(packet->data + 4, kTrueHDSyncWord, 4) == 0;
++
++    // A new sync frame arriving while we have accumulated data means the
++    // previous frame group is complete, flush it before starting the next.
++    if (has_sync && !truehd_buffer_.empty()) {
++      if (!DecodeTrueHDBuffer(buffer)) {
++        av_packet_free(&packet);
++        return false;
++      }
++    }
++
++    if (has_sync || !truehd_buffer_.empty()) {
++      // Record the PTS of the first subframe in the group; this becomes the
++      // timestamp of the assembled packet sent to FFmpeg.
++      if (truehd_buffer_.empty())
++        truehd_buffer_pts_ = packet->pts;
++      truehd_buffer_.insert(truehd_buffer_.end(),
++                            packet->data, packet->data + packet->size);
++      av_packet_free(&packet);
++      return true;
++    }
++
++    // No sync seen, no accumulator, fall through to normal decode path.
++  }
++
++  // Flush any remaining TrueHD/MLP frames before EOS.
++  if ((config_.codec() == AudioCodec::kTRUEHD ||
++       config_.codec() == AudioCodec::kMLP) &&
++      buffer.end_of_stream() && !truehd_buffer_.empty()) {
++    return DecodeTrueHDBuffer(buffer);
++  }
++
+   bool decoded_frame_this_loop = false;
+   // base::Unretained and std::cref are safe to use with the callback given
+   // to DecodePacket() since that callback is only used the function call.
+@@ -276,6 +327,74 @@ bool FFmpegAudioDecoder::FFmpegDecode(const DecoderBuffer& buffer) {
+   return true;
+ }
+
++bool FFmpegAudioDecoder::DecodeTrueHDBuffer(const DecoderBuffer& buffer) {
++  DCHECK(!truehd_buffer_.empty());
++
++  // Guard against a pathologically large accumulation before the narrowing
++  // cast to int required by av_new_packet().
++  if (truehd_buffer_.size() > static_cast<size_t>(INT_MAX)) {
++    MEDIA_LOG(ERROR, media_log_)
++        << "TrueHD/MLP accumulation buffer overflow.";
++    FlushTrueHDBuffer();
++    return false;
++  }
++
++  // Assemble the accumulated subframes into a single FFmpeg packet. Memory
++  // is owned by FFmpeg and freed via av_packet_free() below.
++  AVPacket* assembled = av_packet_alloc();
++  if (!assembled) {
++    MEDIA_LOG(ERROR, media_log_)
++        << "Failed to allocate assembled TrueHD/MLP packet.";
++    FlushTrueHDBuffer();
++    return false;
++  }
++
++  if (av_new_packet(assembled,
++                    static_cast<int>(truehd_buffer_.size())) < 0) {
++    MEDIA_LOG(ERROR, media_log_)
++        << "Failed to allocate assembled TrueHD/MLP packet data.";
++    av_packet_free(&assembled);
++    FlushTrueHDBuffer();
++    return false;
++  }
++
++  memcpy(assembled->data, truehd_buffer_.data(), truehd_buffer_.size());
++  // Use the PTS of the first subframe in the group as the packet timestamp.
++  // DTS and duration are left unset; FFmpeg derives them from the bitstream.
++  assembled->pts = truehd_buffer_pts_;
++  assembled->dts = AV_NOPTS_VALUE;
++  assembled->duration = AV_NOPTS_VALUE;
++
++  bool decoded_frame_this_loop = false;
++  FFmpegDecodingLoop::DecodeStatus decode_status =
++      decoding_loop_->DecodePacket(
++          assembled,
++          base::BindRepeating(&FFmpegAudioDecoder::OnNewFrame,
++                              base::Unretained(this), std::cref(buffer),
++                              &decoded_frame_this_loop));
++  av_packet_free(&assembled);
++  // Always clear the accumulation buffer after a flush attempt, regardless of
++  // whether decode succeeded, to prevent stale data carrying into future frames.
++  FlushTrueHDBuffer();
++
++  if (decode_status == FFmpegDecodingLoop::DecodeStatus::kSendPacketFailed) {
++    MEDIA_LOG(ERROR, media_log_)
++        << "Failed to send assembled TrueHD/MLP packet for decoding: "
++        << buffer.AsHumanReadableString();
++    return false;
++  }
++  if (decode_status ==
++      FFmpegDecodingLoop::DecodeStatus::kFrameProcessingFailed) {
++    // OnNewFrame() has already issued a MEDIA_LOG for this.
++    return false;
++  }
++  if (!decoded_frame_this_loop) {
++    discard_helper_->ProcessBuffers(
++        AudioDiscardHelper::TimeInfo::FromBuffer(buffer), nullptr);
++  }
++  return true;
++}
++
+ bool FFmpegAudioDecoder::OnNewFrame(const DecoderBuffer& buffer,
+                                     bool* decoded_frame_this_loop,
+                                     AVFrame* frame) {
+@@ -357,6 +476,7 @@ bool FFmpegAudioDecoder::OnNewFrame(const DecoderBuffer& buffer,
+ void FFmpegAudioDecoder::ReleaseFFmpegResources() {
+   decoding_loop_.reset();
+   codec_context_.reset();
++  FlushTrueHDBuffer();
+ }
+
+ bool FFmpegAudioDecoder::ConfigureDecoder(const AudioDecoderConfig& config) {
+@@ -402,6 +522,7 @@ bool FFmpegAudioDecoder::ConfigureDecoder(const AudioDecoderConfig& config) {
+     state_ = DecoderState::kUninitialized;
+     return false;
+   }
++
+   // Verify avcodec_open2() used all given options.
+   DCHECK_EQ(0, av_dict_count(codec_options));
+
+diff --git a/media/filters/ffmpeg_audio_decoder.h b/media/filters/ffmpeg_audio_decoder.h
+index 007517cd81916..9946fc9fc541f 100644
+--- a/media/filters/ffmpeg_audio_decoder.h
++++ b/media/filters/ffmpeg_audio_decoder.h
+@@ -7,6 +7,7 @@
+
+ #include <memory>
+ #include <type_traits>
++#include <vector>
+
+ #include "base/functional/callback.h"
+ #include "base/memory/raw_ptr.h"
+@@ -103,6 +104,12 @@ class MEDIA_EXPORT FFmpegAudioDecoder : public AudioDecoder {
+
+   void ResetTimestampState(const AudioDecoderConfig& config);
+
++  // Clears the TrueHD/MLP subframe accumulation buffer.
++  void FlushTrueHDBuffer();
++
++  // Flushes the TrueHD/MLP accumulation buffer to FFmpeg as one packet.
++  bool DecodeTrueHDBuffer(const DecoderBuffer& buffer);
++
+   // If the execution mode is set to asynchronous, wraps the `callback` in a
+   // bind post task on the current default task runner. Otherwise, a noop.
+   template <typename T>
+@@ -143,6 +150,11 @@ class MEDIA_EXPORT FFmpegAudioDecoder : public AudioDecoder {
+   scoped_refptr<AudioBufferMemoryPool> pool_;
+
+   std::unique_ptr<FFmpegDecodingLoop> decoding_loop_;
++
++  // Accumulation buffer for TrueHD/MLP subframe reassembly.
++  // See FFmpegDecode() for details.
++  std::vector<uint8_t> truehd_buffer_;
++  int64_t truehd_buffer_pts_ = INT64_MIN;
+ };
+
+ }  // namespace media
+diff --git a/media/filters/ffmpeg_video_decoder.cc b/media/filters/ffmpeg_video_decoder.cc
+index 014924d33a6ea..0c5ccf119314e 100644
+--- a/media/filters/ffmpeg_video_decoder.cc
++++ b/media/filters/ffmpeg_video_decoder.cc
+@@ -71,6 +71,8 @@ static int GetFFmpegVideoDecoderThreadCount(const VideoDecoderConfig& config) {
+   // Only add more threads for those codecs that we know will benefit.
+   switch (config.codec()) {
+     case VideoCodec::kUnknown:
++      // We do not compile ffmpeg with support for any of these codecs.
++      NOTREACHED();
+     case VideoCodec::kVC1:
+     case VideoCodec::kMPEG2:
+     case VideoCodec::kHEVC:
+@@ -80,9 +82,6 @@ static int GetFFmpegVideoDecoderThreadCount(const VideoDecoderConfig& config) {
+     case VideoCodec::kTheora:
+     case VideoCodec::kMPEG4:
+     case VideoCodec::kVP8:
+-      // We do not compile ffmpeg with support for any of these codecs.
+-      NOTREACHED();
+-
+     case VideoCodec::kH264:
+       // Normalize to three threads for 1080p content, then scale linearly
+       // with number of pixels.
+@@ -117,8 +116,8 @@ static void ReleaseVideoBufferImpl(void* opaque, uint8_t* data) {
+ 
+ // static
+ bool FFmpegVideoDecoder::IsCodecSupported(VideoCodec codec) {
+-  // We only build support for H.264.
+-  return codec == VideoCodec::kH264 && IsDecoderBuiltInVideoCodec(codec);
++  // We only build support for H.264 / H.265.
++  return (codec == VideoCodec::kH264 || codec == VideoCodec::kHEVC) && IsDecoderBuiltInVideoCodec(codec);
+ }
+ 
+ FFmpegVideoDecoder::FFmpegVideoDecoder(MediaLog* media_log)
