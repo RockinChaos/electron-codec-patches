@@ -63,7 +63,7 @@ index fea308401c64e..175602e2f9715 100644
  
  enum class AudioCodecProfile {
 diff --git a/media/base/mime_util_internal.cc b/media/base/mime_util_internal.cc
-index 14b0010db2f35..9030cb7e1a216 100644
+index 14b0010db2f35..740fe49e54c2c 100644
 --- a/media/base/mime_util_internal.cc
 +++ b/media/base/mime_util_internal.cc
 @@ -104,6 +104,9 @@ const StringToCodecMap& GetStringToCodecMap() {
@@ -74,7 +74,7 @@ index 14b0010db2f35..9030cb7e1a216 100644
 +      {"truehd", MimeUtil::TRUEHD},
 +      {"mlp", MimeUtil::MLP},
    });
- 
+
    return *kStringToCodecMap;
 @@ -189,6 +192,10 @@ AudioCodec MimeUtilToAudioCodec(MimeUtil::Codec codec) {
        return AudioCodec::kAC4;
@@ -90,14 +90,35 @@ index 14b0010db2f35..9030cb7e1a216 100644
 @@ -381,6 +388,9 @@ void MimeUtil::AddSupportedMediaFormats() {
    mp4_audio_codecs.emplace(IAMF);
  #endif  // BUILDFLAG(ENABLE_PLATFORM_IAMF_AUDIO)
- 
+
 +  mp4_audio_codecs.emplace(TRUEHD);
 +  mp4_audio_codecs.emplace(MLP);
 +
    CodecSet mp4_codecs(mp4_audio_codecs);
    mp4_codecs.insert(mp4_video_codecs.begin(), mp4_video_codecs.end());
- 
-@@ -661,6 +671,10 @@ bool MimeUtil::IsCodecSupportedOnAndroid(Codec codec,
+
+@@ -424,6 +434,20 @@ void MimeUtil::AddSupportedMediaFormats() {
+   video_3gpp_codecs.emplace(H264);
+   AddContainerWithCodecs("video/3gpp", video_3gpp_codecs);
+
++  // MPEG-2 Transport Stream
++  CodecSet mp2t_codecs;
++  mp2t_codecs.emplace(H264);
++  mp2t_codecs.emplace(MPEG2_AAC);
++  mp2t_codecs.emplace(MPEG4_AAC);
++  mp2t_codecs.emplace(MP3);
++  AddContainerWithCodecs("video/mp2t", mp2t_codecs);
++
++  // MPEG-1/2 Program Stream
++  CodecSet mpeg_ps_codecs;
++  mpeg_ps_codecs.emplace(MPEG4_AAC);
++  mpeg_ps_codecs.emplace(MP3);
++  AddContainerWithCodecs("video/mpeg", mpeg_ps_codecs);
++
+ #if BUILDFLAG(ENABLE_HLS_DEMUXER)
+   CodecSet hls_codecs{
+       H264,
+@@ -661,6 +685,10 @@ bool MimeUtil::IsCodecSupportedOnAndroid(Codec codec,
        return false;
  #endif
  
@@ -124,7 +145,7 @@ index cb26a95da5b36..0dc611fd53bd7 100644
  
    // Platform configuration structure.  Controls which codecs are supported at
 diff --git a/media/base/supported_types.cc b/media/base/supported_types.cc
-index 117bb7eb6d499..c751646f450d8 100644
+index 117bb7eb6d499..3ee9a9c2296b0 100644
 --- a/media/base/supported_types.cc
 +++ b/media/base/supported_types.cc
 @@ -210,6 +210,8 @@ bool IsAudioCodecProprietary(AudioCodec codec) {
@@ -134,11 +155,11 @@ index 117bb7eb6d499..c751646f450d8 100644
 +    case AudioCodec::kTRUEHD:
 +    case AudioCodec::kMLP:
        return true;
- 
+
      case AudioCodec::kFLAC:
 @@ -229,25 +231,7 @@ bool IsAudioCodecProprietary(AudioCodec codec) {
  #endif  // !BUILDFLAG(USE_PROPRIETARY_CODECS)
- 
+
  bool IsDecoderHevcProfileSupported(const VideoType& type) {
 -  if (!IsDecoderColorSpaceSupported(type.color_space)) {
 -    return false;
@@ -160,9 +181,21 @@ index 117bb7eb6d499..c751646f450d8 100644
 -  return false;
 -#endif  // BUILDFLAG(ENABLE_PLATFORM_HEVC)
  }
- 
+
  bool IsDecoderVp9ProfileSupported(const VideoType& type) {
-@@ -490,6 +474,8 @@ bool IsDefaultDecoderSupportedAudioType(const AudioType& type) {
+@@ -461,9 +445,10 @@ bool IsDefaultDecoderSupportedVideoType(const VideoType& type) {
+       return IsDecoderHevcProfileSupported(type);
+     case VideoCodec::kDolbyVision:
+       return IsDecoderDolbyVisionProfileSupported(type);
++    case VideoCodec::kMPEG2:
++      return IsDecoderBuiltInVideoCodec(type.codec);
+     case VideoCodec::kUnknown:
+     case VideoCodec::kVC1:
+-    case VideoCodec::kMPEG2:
+     case VideoCodec::kMPEG4:
+       return false;
+   }
+@@ -490,6 +475,8 @@ bool IsDefaultDecoderSupportedAudioType(const AudioType& type) {
      case AudioCodec::kPCM_S24BE:
      case AudioCodec::kPCM_ALAW:
      case AudioCodec::kVorbis:
@@ -171,17 +204,18 @@ index 117bb7eb6d499..c751646f450d8 100644
        return true;
      case AudioCodec::kAMR_NB:
      case AudioCodec::kAMR_WB:
-@@ -579,7 +565,7 @@ bool IsEncoderOptionalVideoType(const media::VideoType& type) {
- 
+@@ -579,7 +566,8 @@ bool IsEncoderOptionalVideoType(const media::VideoType& type) {
+
  bool IsDecoderBuiltInVideoCodec(VideoCodec codec) {
  #if BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS) && BUILDFLAG(USE_PROPRIETARY_CODECS)
 -  if (codec == VideoCodec::kH264) {
-+  if (codec == VideoCodec::kH264 || codec == VideoCodec::kHEVC) {
++  if (codec == VideoCodec::kH264 || codec == VideoCodec::kHEVC ||
++      codec == VideoCodec::kMPEG2) {
      return true;
    }
  #endif  // BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS) &&
 diff --git a/media/ffmpeg/ffmpeg_common.cc b/media/ffmpeg/ffmpeg_common.cc
-index 043513a51bb80..75300016bef9a 100644
+index 043513a51bb80..fc43f77b6e1c7 100644
 --- a/media/ffmpeg/ffmpeg_common.cc
 +++ b/media/ffmpeg/ffmpeg_common.cc
 @@ -69,7 +69,7 @@ VideoColorSpace GetGuessedColorSpace(const VideoColorSpace& color_space) {
@@ -189,7 +223,7 @@ index 043513a51bb80..75300016bef9a 100644
    // This should match the configured lists in //third_party/ffmpeg.
  #if BUILDFLAG(USE_PROPRIETARY_CODECS) && BUILDFLAG(ENABLE_FFMPEG_VIDEO_DECODERS)
 -  return "h264";
-+  return "h264,hevc";
++  return "h264,hevc,mpeg2video";
  #else
    return "";
  #endif
@@ -227,7 +261,25 @@ index 043513a51bb80..75300016bef9a 100644
      case AudioCodec::kALAC:
        return AV_CODEC_ID_ALAC;
      case AudioCodec::kMP3:
-@@ -1078,7 +1098,7 @@ int32_t HashCodecName(const char* codec_name) {
+@@ -255,6 +275,8 @@ static VideoCodec CodecIDToVideoCodec(AVCodecID codec_id) {
+     case AV_CODEC_ID_HEVC:
+       return VideoCodec::kHEVC;
+ #endif
++    case AV_CODEC_ID_MPEG2VIDEO:
++      return VideoCodec::kMPEG2;
+     case AV_CODEC_ID_THEORA:
+       return VideoCodec::kTheora;
+     case AV_CODEC_ID_MPEG4:
+@@ -279,6 +301,8 @@ AVCodecID VideoCodecToCodecID(VideoCodec video_codec) {
+     case VideoCodec::kHEVC:
+       return AV_CODEC_ID_HEVC;
+ #endif
++    case VideoCodec::kMPEG2:
++      return AV_CODEC_ID_MPEG2VIDEO;
+     case VideoCodec::kTheora:
+       return AV_CODEC_ID_THEORA;
+     case VideoCodec::kMPEG4:
+@@ -1078,7 +1102,7 @@ int32_t HashCodecName(const char* codec_name) {
  
  const char* GetAllowedAudioDecoders() {
  #if BUILDFLAG(USE_PROPRIETARY_CODECS)
@@ -457,8 +509,84 @@ index 007517cd81916..9946fc9fc541f 100644
  };
 
  }  // namespace media
+diff --git a/media/filters/ffmpeg_demuxer.cc b/media/filters/ffmpeg_demuxer.cc
+index f3a637fc7d30f..d99eb188ceff3 100644
+--- a/media/filters/ffmpeg_demuxer.cc
++++ b/media/filters/ffmpeg_demuxer.cc
+@@ -496,7 +496,15 @@ void FFmpegDemuxerStream::EnqueuePacket(ScopedAVPacket packet) {
+     return;
+   }
+
+-  buffer->set_timestamp(stream_timestamp);
++  // For MPEG-TS broadcast streams, rebase timestamps to be relative to the
++  // stream start time so the decoder sees timestamps starting near zero.
++  if (demuxer_->container() ==
++          container_names::MediaContainerName::kContainerMPEG2TS &&
++      demuxer_->start_time() > base::TimeDelta()) {
++    buffer->set_timestamp(stream_timestamp - demuxer_->start_time());
++  } else {
++    buffer->set_timestamp(stream_timestamp);
++  }
+
+   auto discard_padding = GetDiscardPaddingFromAVPacket(
+       packet.get(), is_audio ? audio_decoder_config().samples_per_second() : 0);
+@@ -1023,8 +1031,14 @@ void FFmpegDemuxer::SeekInternal(base::TimeDelta time,
+       GetFirstEnabledFFmpegStream(DemuxerStream::AUDIO);
+
+   base::TimeDelta seek_time;
+-  if (start_time_.is_negative() && audio_stream &&
+-      audio_stream->audio_decoder_config().codec_delay()) {
++  if (container() == container_names::MediaContainerName::kContainerMPEG2TS &&
++      start_time_ > base::TimeDelta()) {
++    // `time` arrives in the zero-based domain exposed by GetStartTime(), so
++    // re-add the absolute stream start to get back into AVStream PTS space.
++    // Clamped defensively in case `time` is ever negative.
++    seek_time = std::max(start_time_, start_time_ + time);
++  } else if (start_time_.is_negative() && audio_stream &&
++             audio_stream->audio_decoder_config().codec_delay()) {
+     seek_time = time + start_time_;
+   } else {
+     seek_time = std::max(start_time_, time);
+@@ -1120,6 +1134,13 @@ FFmpegDemuxerStream* FFmpegDemuxer::GetFirstEnabledFFmpegStream(
+ }
+
+ base::TimeDelta FFmpegDemuxer::GetStartTime() const {
++  // MPEG-TS broadcast streams have large absolute timestamps based on wall
++  // clock time. Expose zero as the start time so the player UI shows 0:00,
++  // while keeping start_time_ intact so SeekInternal maps seeks correctly.
++  if (container() == container_names::MediaContainerName::kContainerMPEG2TS &&
++      start_time_ > base::TimeDelta()) {
++    return base::TimeDelta();
++  }
+   return std::max(start_time_, base::TimeDelta());
+ }
+
+diff --git a/media/filters/ffmpeg_glue.cc b/media/filters/ffmpeg_glue.cc
+index 6ecbf5d8b3157..8ce4ff438ff55 100644
+--- a/media/filters/ffmpeg_glue.cc
++++ b/media/filters/ffmpeg_glue.cc
+@@ -89,6 +89,8 @@ static const char* GetAllowedDemuxers() {
+                                                  "flac", "mp3",      "mov"};
+ #if BUILDFLAG(USE_PROPRIETARY_CODECS)
+     allowed_demuxers.push_back("aac");
++    allowed_demuxers.push_back("mpegts");
++    allowed_demuxers.push_back("mpeg");
+ #endif
+     return base::JoinString(allowed_demuxers, ",");
+   }());
+@@ -209,6 +211,10 @@ bool FFmpegGlue::OpenContext(bool is_local_file) {
+     container_ = container_names::MediaContainerName::kContainerAAC;
+   } else if (format_name == "mp3") {
+     container_ = container_names::MediaContainerName::kContainerMP3;
++  } else if (format_name == "mpegts") {
++    container_ = container_names::MediaContainerName::kContainerMPEG2TS;
++  } else if (format_name == "mpeg") {
++    container_ = container_names::MediaContainerName::kContainerMPEG2PS;
+   } else if (format_name == "amr") {
+     container_ = container_names::MediaContainerName::kContainerAMR;
+   } else if (format_name == "avi") {
 diff --git a/media/filters/ffmpeg_video_decoder.cc b/media/filters/ffmpeg_video_decoder.cc
-index 014924d33a6ea..0c5ccf119314e 100644
+index 014924d33a6ea..4008922f8843b 100644
 --- a/media/filters/ffmpeg_video_decoder.cc
 +++ b/media/filters/ffmpeg_video_decoder.cc
 @@ -71,6 +71,8 @@ static int GetFFmpegVideoDecoderThreadCount(const VideoDecoderConfig& config) {
@@ -480,14 +608,59 @@ index 014924d33a6ea..0c5ccf119314e 100644
      case VideoCodec::kH264:
        // Normalize to three threads for 1080p content, then scale linearly
        // with number of pixels.
-@@ -117,8 +116,8 @@ static void ReleaseVideoBufferImpl(void* opaque, uint8_t* data) {
- 
+@@ -117,8 +116,9 @@ static void ReleaseVideoBufferImpl(void* opaque, uint8_t* data) {
+
  // static
  bool FFmpegVideoDecoder::IsCodecSupported(VideoCodec codec) {
 -  // We only build support for H.264.
 -  return codec == VideoCodec::kH264 && IsDecoderBuiltInVideoCodec(codec);
-+  // We only build support for H.264 / H.265.
-+  return (codec == VideoCodec::kH264 || codec == VideoCodec::kHEVC) && IsDecoderBuiltInVideoCodec(codec);
++  // We only build support for H.264 / H.265 / MPEG.
++  return (codec == VideoCodec::kH264 || codec == VideoCodec::kHEVC ||
++          codec == VideoCodec::kMPEG2) && IsDecoderBuiltInVideoCodec(codec);
  }
- 
+
  FFmpegVideoDecoder::FFmpegVideoDecoder(MediaLog* media_log)
+@@ -340,6 +340,7 @@ void FFmpegVideoDecoder::Reset(base::OnceClosure closure) {
+   avcodec_flush_buffers(codec_context_.get());
+   state_ = DecoderState::kNormal;
+   error_status_ = DecoderStatus::Codes::kFailed;
++  has_received_keyframe_ = false;
+
+   // PostTask() to avoid calling |closure| immediately.
+   base::SequencedTaskRunner::GetCurrentDefault()->PostTask(FROM_HERE,
+@@ -375,6 +376,18 @@ bool FFmpegVideoDecoder::FFmpegDecode(const DecoderBuffer& buffer) {
+     DCHECK(packet->data);
+     DCHECK_GT(packet->size, 0);
+   }
++
++  // Drop non-keyframe packets until we've seen the first keyframe.
++  // Necessary for MPEG-2 TS streams with large broadcast timestamps.
++  if (!has_received_keyframe_ && !buffer.end_of_stream() &&
++      !buffer.is_key_frame()) {
++    av_packet_free(&packet);
++    return true;
++  }
++  if (buffer.is_key_frame()) {
++    has_received_keyframe_ = true;
++  }
++
+   FFmpegDecodingLoop::DecodeStatus decode_status = decoding_loop_->DecodePacket(
+       packet, base::BindRepeating(&FFmpegVideoDecoder::OnNewFrame,
+                                   base::Unretained(this)));
+diff --git a/media/filters/ffmpeg_video_decoder.h b/media/filters/ffmpeg_video_decoder.h
+index a381ede884462..1fd0c77e148c0 100644
+--- a/media/filters/ffmpeg_video_decoder.h
++++ b/media/filters/ffmpeg_video_decoder.h
+@@ -67,6 +67,12 @@ class MEDIA_EXPORT FFmpegVideoDecoder : public VideoDecoder {
+   bool FFmpegDecode(const DecoderBuffer& buffer);
+   bool OnNewFrame(AVFrame* frame);
+
++  // Set once the first keyframe has been observed since the last Initialize()
++  // or Reset(); used to drop leading non-keyframe packets until then. This is
++  // necessary both at stream start and after a seek, since MPEG-2 TS streams
++  // may resume mid-GOP with large broadcast timestamps.
++  bool has_received_keyframe_ = false;
++
+   // Handles (re-)initializing the decoder with a (new) config.
+   // Returns true if initialization was successful.
+   bool ConfigureDecoder(const VideoDecoderConfig& config, bool low_delay);
