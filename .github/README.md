@@ -8,17 +8,16 @@ Electron patches enabling **HEVC**, **MPEG-2**, **DTS**, **AC3**, **E-AC3**, **T
 
 Every patched Electron version includes an archived [README](#-previous-versions) documenting the exact build steps and environment used during patch creation.
 
-### ✅ Electron [v42.0.0](https://releases.electronjs.org/release/v42.0.0) → [v42.3.0](https://releases.electronjs.org/release/v42.3.0)
+### ✅ Electron [v42.9.0](https://releases.electronjs.org/release/v42.9.0)
 
-**Patch Version:** v42.0.0  
-**Tested Range:** v42.0.0 – v42.3.0
+**Patch Version:** v42.9.0
 
 | Platform | Architecture | Build Requirements |
 |----------|-------------|-------------------|
-| 🪟 **Windows** | x64 | Node 24.15.0 • Python ≥ 3.9 |
-| 🐧 **Linux** | x64 | Node 24.15.0 • Python ≥ 3.9 |
-| 🍎 **macOS** | x64 | Node 24.15.0 • Xcode 26.3 • MetalToolChain • Python ≥ 3.9 |
-| 🍎 **macOS** | arm64 | Node 24.15.0 • Xcode 26.3 • MetalToolChain • Python ≥ 3.9 |
+| 🪟 **Windows** | x64 | Node 24.18.1 • Python ≥ 3.9 |
+| 🐧 **Linux** | x64 | Node 24.18.1 • Python ≥ 3.9 |
+| 🍎 **macOS** | x64 | Node 24.18.1 • Xcode 26.3 • MetalToolChain • Python ≥ 3.9 |
+| 🍎 **macOS** | arm64 | Node 24.18.1 • Xcode 26.3 • MetalToolChain • Python ≥ 3.9 |
 
 > [!NOTE]
 > **macOS:** You may need to launch Xcode settings, navigate to Components, and remove/reinstall MetalToolChain if issues arise.
@@ -28,6 +27,7 @@ Every patched Electron version includes an archived [README](#-previous-versions
 ### 📚 Previous Versions
 
 - **Electron v39.0.0 - v39.8.10** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v39.0.0)
+- **Electron v42.0.0 - v42.3.0** - [README & Patches](https://github.com/RockinChaos/electron-codec-patches/tree/master/v42.0.0)
 
 ---
 
@@ -124,7 +124,7 @@ To update to a specific Electron version:
 ```bash
 cd src/electron
 git pull
-git checkout v42.0.0
+git checkout v42.9.0
 # Use -f to force sync, -D to delete files no longer in the repository
 gclient sync -f
 ```
