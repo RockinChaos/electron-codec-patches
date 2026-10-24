@@ -1,0 +1,2141 @@
+diff --git a/chromium/config/Chrome/linux/x64/config.asm b/chromium/config/Chrome/linux/x64/config.asm
+index 46871dc..a231de9 100644
+--- a/chromium/config/Chrome/linux/x64/config.asm
++++ b/chromium/config/Chrome/linux/x64/config.asm
+@@ -683,7 +683,7 @@
+ %define CONFIG_FFPROBE 0
+ %define CONFIG_FFMPEG 0
+ %define CONFIG_DWT 0
+-%define CONFIG_ERROR_RESILIENCE 0
++%define CONFIG_ERROR_RESILIENCE 1
+ %define CONFIG_FAAN 0
+ %define CONFIG_FAST_UNALIGNED 1
+ %define CONFIG_IAMF 0
+@@ -716,13 +716,13 @@
+ %define CONFIG_MUXERS 0
+ %define CONFIG_PROTOCOLS 0
+ %define CONFIG_AANDCTTABLES 0
+-%define CONFIG_AC3DSP 0
++%define CONFIG_AC3DSP 1
+ %define CONFIG_ADTS_HEADER 1
+ %define CONFIG_ATSC_A53 1
+ %define CONFIG_AUDIO_FRAME_QUEUE 0
+ %define CONFIG_AUDIODSP 0
+-%define CONFIG_BLOCKDSP 0
+-%define CONFIG_BSWAPDSP 0
++%define CONFIG_BLOCKDSP 1
++%define CONFIG_BSWAPDSP 1
+ %define CONFIG_CABAC 1
+ %define CONFIG_CBS 0
+ %define CONFIG_CBS_APV 0
+@@ -764,15 +764,15 @@
+ %define CONFIG_H264PRED 1
+ %define CONFIG_H264QPEL 1
+ %define CONFIG_H264_SEI 1
+-%define CONFIG_HEVCPARSE 0
+-%define CONFIG_HEVC_SEI 0
+-%define CONFIG_HPELDSP 0
++%define CONFIG_HEVCPARSE 1
++%define CONFIG_HEVC_SEI 1
++%define CONFIG_HPELDSP 1
+ %define CONFIG_HUFFMAN 0
+ %define CONFIG_HUFFYUVDSP 0
+ %define CONFIG_HUFFYUVENCDSP 0
+ %define CONFIG_IAMFDEC 0
+ %define CONFIG_IAMFENC 0
+-%define CONFIG_IDCTDSP 0
++%define CONFIG_IDCTDSP 1
+ %define CONFIG_INFLATE_WRAPPER 0
+ %define CONFIG_INTRAX8 0
+ %define CONFIG_ISO_MEDIA 1
+@@ -788,14 +788,14 @@
+ %define CONFIG_LLVIDENCDSP 0
+ %define CONFIG_LPC 0
+ %define CONFIG_LZF 0
+-%define CONFIG_ME_CMP 0
+-%define CONFIG_MPEG_ER 0
++%define CONFIG_ME_CMP 1
++%define CONFIG_MPEG_ER 1
+ %define CONFIG_MPEGAUDIO 1
+ %define CONFIG_MPEGAUDIODSP 1
+ %define CONFIG_MPEGAUDIOHEADER 1
+ %define CONFIG_MPEG4AUDIO 1
+-%define CONFIG_MPEGVIDEO 0
+-%define CONFIG_MPEGVIDEODEC 0
++%define CONFIG_MPEGVIDEO 1
++%define CONFIG_MPEGVIDEODEC 1
+ %define CONFIG_MPEGVIDEOENC 0
+ %define CONFIG_MPEGVIDEOENCDSP 0
+ %define CONFIG_MSMPEG4DEC 0
+diff --git a/chromium/config/Chrome/linux/x64/config.h b/chromium/config/Chrome/linux/x64/config.h
+index ce39647..496afc2 100644
+--- a/chromium/config/Chrome/linux/x64/config.h
++++ b/chromium/config/Chrome/linux/x64/config.h
+@@ -697,7 +697,7 @@
+ #define CONFIG_FFPROBE 0
+ #define CONFIG_FFMPEG 0
+ #define CONFIG_DWT 0
+-#define CONFIG_ERROR_RESILIENCE 0
++#define CONFIG_ERROR_RESILIENCE 1
+ #define CONFIG_FAAN 0
+ #define CONFIG_FAST_UNALIGNED 1
+ #define CONFIG_IAMF 0
+@@ -730,13 +730,13 @@
+ #define CONFIG_MUXERS 0
+ #define CONFIG_PROTOCOLS 0
+ #define CONFIG_AANDCTTABLES 0
+-#define CONFIG_AC3DSP 0
++#define CONFIG_AC3DSP 1
+ #define CONFIG_ADTS_HEADER 1
+ #define CONFIG_ATSC_A53 1
+ #define CONFIG_AUDIO_FRAME_QUEUE 0
+ #define CONFIG_AUDIODSP 0
+-#define CONFIG_BLOCKDSP 0
+-#define CONFIG_BSWAPDSP 0
++#define CONFIG_BLOCKDSP 1
++#define CONFIG_BSWAPDSP 1
+ #define CONFIG_CABAC 1
+ #define CONFIG_CBS 0
+ #define CONFIG_CBS_APV 0
+@@ -778,15 +778,15 @@
+ #define CONFIG_H264PRED 1
+ #define CONFIG_H264QPEL 1
+ #define CONFIG_H264_SEI 1
+-#define CONFIG_HEVCPARSE 0
+-#define CONFIG_HEVC_SEI 0
+-#define CONFIG_HPELDSP 0
++#define CONFIG_HEVCPARSE 1
++#define CONFIG_HEVC_SEI 1
++#define CONFIG_HPELDSP 1
+ #define CONFIG_HUFFMAN 0
+ #define CONFIG_HUFFYUVDSP 0
+ #define CONFIG_HUFFYUVENCDSP 0
+ #define CONFIG_IAMFDEC 0
+ #define CONFIG_IAMFENC 0
+-#define CONFIG_IDCTDSP 0
++#define CONFIG_IDCTDSP 1
+ #define CONFIG_INFLATE_WRAPPER 0
+ #define CONFIG_INTRAX8 0
+ #define CONFIG_ISO_MEDIA 1
+@@ -802,14 +802,14 @@
+ #define CONFIG_LLVIDENCDSP 0
+ #define CONFIG_LPC 0
+ #define CONFIG_LZF 0
+-#define CONFIG_ME_CMP 0
+-#define CONFIG_MPEG_ER 0
++#define CONFIG_ME_CMP 1
++#define CONFIG_MPEG_ER 1
+ #define CONFIG_MPEGAUDIO 1
+ #define CONFIG_MPEGAUDIODSP 1
+ #define CONFIG_MPEGAUDIOHEADER 1
+ #define CONFIG_MPEG4AUDIO 1
+-#define CONFIG_MPEGVIDEO 0
+-#define CONFIG_MPEGVIDEODEC 0
++#define CONFIG_MPEGVIDEO 1
++#define CONFIG_MPEGVIDEODEC 1
+ #define CONFIG_MPEGVIDEOENC 0
+ #define CONFIG_MPEGVIDEOENCDSP 0
+ #define CONFIG_MSMPEG4DEC 0
+diff --git a/chromium/config/Chrome/linux/x64/config_components.asm b/chromium/config/Chrome/linux/x64/config_components.asm
+index 695266e..31960dd 100644
+--- a/chromium/config/Chrome/linux/x64/config_components.asm
++++ b/chromium/config/Chrome/linux/x64/config_components.asm
+@@ -142,7 +142,7 @@
+ %define CONFIG_H264_QSV_DECODER 0
+ %define CONFIG_H264_RKMPP_DECODER 0
+ %define CONFIG_HAP_DECODER 0
+-%define CONFIG_HEVC_DECODER 0
++%define CONFIG_HEVC_DECODER 1
+ %define CONFIG_HEVC_QSV_DECODER 0
+ %define CONFIG_HEVC_RKMPP_DECODER 0
+ %define CONFIG_HEVC_V4L2M2M_DECODER 0
+@@ -180,8 +180,8 @@
+ %define CONFIG_MMVIDEO_DECODER 0
+ %define CONFIG_MOBICLIP_DECODER 0
+ %define CONFIG_MOTIONPIXELS_DECODER 0
+-%define CONFIG_MPEG1VIDEO_DECODER 0
+-%define CONFIG_MPEG2VIDEO_DECODER 0
++%define CONFIG_MPEG1VIDEO_DECODER 1
++%define CONFIG_MPEG2VIDEO_DECODER 1
+ %define CONFIG_MPEG4_DECODER 0
+ %define CONFIG_MPEG4_V4L2M2M_DECODER 0
+ %define CONFIG_MPEG4_MMAL_DECODER 0
+@@ -345,8 +345,8 @@
+ %define CONFIG_AAC_DECODER 1
+ %define CONFIG_AAC_FIXED_DECODER 0
+ %define CONFIG_AAC_LATM_DECODER 0
+-%define CONFIG_AC3_DECODER 0
+-%define CONFIG_AC3_FIXED_DECODER 0
++%define CONFIG_AC3_DECODER 1
++%define CONFIG_AC3_FIXED_DECODER 1
+ %define CONFIG_ACELP_KELVIN_DECODER 0
+ %define CONFIG_AHX_DECODER 0
+ %define CONFIG_ALAC_DECODER 0
+@@ -368,7 +368,7 @@
+ %define CONFIG_BMV_AUDIO_DECODER 0
+ %define CONFIG_BONK_DECODER 0
+ %define CONFIG_COOK_DECODER 0
+-%define CONFIG_DCA_DECODER 0
++%define CONFIG_DCA_DECODER 1
+ %define CONFIG_DFPWM_DECODER 0
+ %define CONFIG_DOLBY_E_DECODER 0
+ %define CONFIG_DSD_LSBF_DECODER 0
+@@ -378,7 +378,7 @@
+ %define CONFIG_DSICINAUDIO_DECODER 0
+ %define CONFIG_DSS_SP_DECODER 0
+ %define CONFIG_DST_DECODER 0
+-%define CONFIG_EAC3_DECODER 0
++%define CONFIG_EAC3_DECODER 1
+ %define CONFIG_EVRC_DECODER 0
+ %define CONFIG_FASTAUDIO_DECODER 0
+ %define CONFIG_FFWAVESYNTH_DECODER 0
+@@ -400,10 +400,10 @@
+ %define CONFIG_MACE6_DECODER 0
+ %define CONFIG_METASOUND_DECODER 0
+ %define CONFIG_MISC4_DECODER 0
+-%define CONFIG_MLP_DECODER 0
+-%define CONFIG_MP1_DECODER 0
++%define CONFIG_MLP_DECODER 1
++%define CONFIG_MP1_DECODER 1
+ %define CONFIG_MP1FLOAT_DECODER 0
+-%define CONFIG_MP2_DECODER 0
++%define CONFIG_MP2_DECODER 1
+ %define CONFIG_MP2FLOAT_DECODER 0
+ %define CONFIG_MP3FLOAT_DECODER 0
+ %define CONFIG_MP3_DECODER 1
+@@ -432,7 +432,7 @@
+ %define CONFIG_SIREN_DECODER 0
+ %define CONFIG_SMACKAUD_DECODER 0
+ %define CONFIG_TAK_DECODER 0
+-%define CONFIG_TRUEHD_DECODER 0
++%define CONFIG_TRUEHD_DECODER 1
+ %define CONFIG_TRUESPEECH_DECODER 0
+ %define CONFIG_TTA_DECODER 0
+ %define CONFIG_TWINVQ_DECODER 0
+@@ -1016,7 +1016,7 @@
+ %define CONFIG_WMV3_VDPAU_HWACCEL 0
+ %define CONFIG_AAC_PARSER 1
+ %define CONFIG_AAC_LATM_PARSER 0
+-%define CONFIG_AC3_PARSER 0
++%define CONFIG_AC3_PARSER 1
+ %define CONFIG_ADX_PARSER 0
+ %define CONFIG_AHX_PARSER 0
+ %define CONFIG_AMR_PARSER 0
+@@ -1028,7 +1028,7 @@
+ %define CONFIG_CAVSVIDEO_PARSER 0
+ %define CONFIG_COOK_PARSER 0
+ %define CONFIG_CRI_PARSER 0
+-%define CONFIG_DCA_PARSER 0
++%define CONFIG_DCA_PARSER 1
+ %define CONFIG_DIRAC_PARSER 0
+ %define CONFIG_DNXHD_PARSER 0
+ %define CONFIG_DNXUC_PARSER 0
+@@ -1049,7 +1049,7 @@
+ %define CONFIG_H261_PARSER 0
+ %define CONFIG_H263_PARSER 0
+ %define CONFIG_H264_PARSER 1
+-%define CONFIG_HEVC_PARSER 0
++%define CONFIG_HEVC_PARSER 1
+ %define CONFIG_HDR_PARSER 0
+ %define CONFIG_IPU_PARSER 0
+ %define CONFIG_JPEG2000_PARSER 0
+@@ -1058,10 +1058,10 @@
+ %define CONFIG_LCEVC_PARSER 0
+ %define CONFIG_MISC4_PARSER 0
+ %define CONFIG_MJPEG_PARSER 0
+-%define CONFIG_MLP_PARSER 0
++%define CONFIG_MLP_PARSER 1
+ %define CONFIG_MPEG4VIDEO_PARSER 0
+ %define CONFIG_MPEGAUDIO_PARSER 1
+-%define CONFIG_MPEGVIDEO_PARSER 0
++%define CONFIG_MPEGVIDEO_PARSER 1
+ %define CONFIG_OPUS_PARSER 1
+ %define CONFIG_PRORES_PARSER 0
+ %define CONFIG_PNG_PARSER 0
+@@ -1709,7 +1709,7 @@
+ %define CONFIG_AA_DEMUXER 0
+ %define CONFIG_AAC_DEMUXER 1
+ %define CONFIG_AAX_DEMUXER 0
+-%define CONFIG_AC3_DEMUXER 0
++%define CONFIG_AC3_DEMUXER 1
+ %define CONFIG_AC4_DEMUXER 0
+ %define CONFIG_ACE_DEMUXER 0
+ %define CONFIG_ACM_DEMUXER 0
+@@ -1784,15 +1784,15 @@
+ %define CONFIG_DSF_DEMUXER 0
+ %define CONFIG_DSICIN_DEMUXER 0
+ %define CONFIG_DSS_DEMUXER 0
+-%define CONFIG_DTS_DEMUXER 0
+-%define CONFIG_DTSHD_DEMUXER 0
++%define CONFIG_DTS_DEMUXER 1
++%define CONFIG_DTSHD_DEMUXER 1
+ %define CONFIG_DV_DEMUXER 0
+ %define CONFIG_DVBSUB_DEMUXER 0
+ %define CONFIG_DVBTXT_DEMUXER 0
+ %define CONFIG_DXA_DEMUXER 0
+ %define CONFIG_EA_DEMUXER 0
+ %define CONFIG_EA_CDATA_DEMUXER 0
+-%define CONFIG_EAC3_DEMUXER 0
++%define CONFIG_EAC3_DEMUXER 1
+ %define CONFIG_EPAF_DEMUXER 0
+ %define CONFIG_EVC_DEMUXER 0
+ %define CONFIG_FFMETADATA_DEMUXER 0
+@@ -1867,7 +1867,7 @@
+ %define CONFIG_MICRODVD_DEMUXER 0
+ %define CONFIG_MJPEG_DEMUXER 0
+ %define CONFIG_MJPEG_2000_DEMUXER 0
+-%define CONFIG_MLP_DEMUXER 0
++%define CONFIG_MLP_DEMUXER 1
+ %define CONFIG_MLV_DEMUXER 0
+ %define CONFIG_MM_DEMUXER 0
+ %define CONFIG_MMF_DEMUXER 0
+@@ -1877,10 +1877,10 @@
+ %define CONFIG_MP3_DEMUXER 1
+ %define CONFIG_MPC_DEMUXER 0
+ %define CONFIG_MPC8_DEMUXER 0
+-%define CONFIG_MPEGPS_DEMUXER 0
+-%define CONFIG_MPEGTS_DEMUXER 0
++%define CONFIG_MPEGPS_DEMUXER 1
++%define CONFIG_MPEGTS_DEMUXER 1
+ %define CONFIG_MPEGTSRAW_DEMUXER 0
+-%define CONFIG_MPEGVIDEO_DEMUXER 0
++%define CONFIG_MPEGVIDEO_DEMUXER 1
+ %define CONFIG_MPJPEG_DEMUXER 0
+ %define CONFIG_MPL2_DEMUXER 0
+ %define CONFIG_MPSUB_DEMUXER 0
+@@ -1989,7 +1989,7 @@
+ %define CONFIG_THREEDOSTR_DEMUXER 0
+ %define CONFIG_TIERTEXSEQ_DEMUXER 0
+ %define CONFIG_TMV_DEMUXER 0
+-%define CONFIG_TRUEHD_DEMUXER 0
++%define CONFIG_TRUEHD_DEMUXER 1
+ %define CONFIG_TTA_DEMUXER 0
+ %define CONFIG_TXD_DEMUXER 0
+ %define CONFIG_TTY_DEMUXER 0
+diff --git a/chromium/config/Chrome/linux/x64/config_components.h b/chromium/config/Chrome/linux/x64/config_components.h
+index 7168328..fc7abba 100644
+--- a/chromium/config/Chrome/linux/x64/config_components.h
++++ b/chromium/config/Chrome/linux/x64/config_components.h
+@@ -144,7 +144,7 @@
+ #define CONFIG_H264_QSV_DECODER 0
+ #define CONFIG_H264_RKMPP_DECODER 0
+ #define CONFIG_HAP_DECODER 0
+-#define CONFIG_HEVC_DECODER 0
++#define CONFIG_HEVC_DECODER 1
+ #define CONFIG_HEVC_QSV_DECODER 0
+ #define CONFIG_HEVC_RKMPP_DECODER 0
+ #define CONFIG_HEVC_V4L2M2M_DECODER 0
+@@ -182,8 +182,8 @@
+ #define CONFIG_MMVIDEO_DECODER 0
+ #define CONFIG_MOBICLIP_DECODER 0
+ #define CONFIG_MOTIONPIXELS_DECODER 0
+-#define CONFIG_MPEG1VIDEO_DECODER 0
+-#define CONFIG_MPEG2VIDEO_DECODER 0
++#define CONFIG_MPEG1VIDEO_DECODER 1
++#define CONFIG_MPEG2VIDEO_DECODER 1
+ #define CONFIG_MPEG4_DECODER 0
+ #define CONFIG_MPEG4_V4L2M2M_DECODER 0
+ #define CONFIG_MPEG4_MMAL_DECODER 0
+@@ -347,8 +347,8 @@
+ #define CONFIG_AAC_DECODER 1
+ #define CONFIG_AAC_FIXED_DECODER 0
+ #define CONFIG_AAC_LATM_DECODER 0
+-#define CONFIG_AC3_DECODER 0
+-#define CONFIG_AC3_FIXED_DECODER 0
++#define CONFIG_AC3_DECODER 1
++#define CONFIG_AC3_FIXED_DECODER 1
+ #define CONFIG_ACELP_KELVIN_DECODER 0
+ #define CONFIG_AHX_DECODER 0
+ #define CONFIG_ALAC_DECODER 0
+@@ -370,7 +370,7 @@
+ #define CONFIG_BMV_AUDIO_DECODER 0
+ #define CONFIG_BONK_DECODER 0
+ #define CONFIG_COOK_DECODER 0
+-#define CONFIG_DCA_DECODER 0
++#define CONFIG_DCA_DECODER 1
+ #define CONFIG_DFPWM_DECODER 0
+ #define CONFIG_DOLBY_E_DECODER 0
+ #define CONFIG_DSD_LSBF_DECODER 0
+@@ -380,7 +380,7 @@
+ #define CONFIG_DSICINAUDIO_DECODER 0
+ #define CONFIG_DSS_SP_DECODER 0
+ #define CONFIG_DST_DECODER 0
+-#define CONFIG_EAC3_DECODER 0
++#define CONFIG_EAC3_DECODER 1
+ #define CONFIG_EVRC_DECODER 0
+ #define CONFIG_FASTAUDIO_DECODER 0
+ #define CONFIG_FFWAVESYNTH_DECODER 0
+@@ -402,10 +402,10 @@
+ #define CONFIG_MACE6_DECODER 0
+ #define CONFIG_METASOUND_DECODER 0
+ #define CONFIG_MISC4_DECODER 0
+-#define CONFIG_MLP_DECODER 0
+-#define CONFIG_MP1_DECODER 0
++#define CONFIG_MLP_DECODER 1
++#define CONFIG_MP1_DECODER 1
+ #define CONFIG_MP1FLOAT_DECODER 0
+-#define CONFIG_MP2_DECODER 0
++#define CONFIG_MP2_DECODER 1
+ #define CONFIG_MP2FLOAT_DECODER 0
+ #define CONFIG_MP3FLOAT_DECODER 0
+ #define CONFIG_MP3_DECODER 1
+@@ -434,7 +434,7 @@
+ #define CONFIG_SIREN_DECODER 0
+ #define CONFIG_SMACKAUD_DECODER 0
+ #define CONFIG_TAK_DECODER 0
+-#define CONFIG_TRUEHD_DECODER 0
++#define CONFIG_TRUEHD_DECODER 1
+ #define CONFIG_TRUESPEECH_DECODER 0
+ #define CONFIG_TTA_DECODER 0
+ #define CONFIG_TWINVQ_DECODER 0
+@@ -1018,7 +1018,7 @@
+ #define CONFIG_WMV3_VDPAU_HWACCEL 0
+ #define CONFIG_AAC_PARSER 1
+ #define CONFIG_AAC_LATM_PARSER 0
+-#define CONFIG_AC3_PARSER 0
++#define CONFIG_AC3_PARSER 1
+ #define CONFIG_ADX_PARSER 0
+ #define CONFIG_AHX_PARSER 0
+ #define CONFIG_AMR_PARSER 0
+@@ -1030,7 +1030,7 @@
+ #define CONFIG_CAVSVIDEO_PARSER 0
+ #define CONFIG_COOK_PARSER 0
+ #define CONFIG_CRI_PARSER 0
+-#define CONFIG_DCA_PARSER 0
++#define CONFIG_DCA_PARSER 1
+ #define CONFIG_DIRAC_PARSER 0
+ #define CONFIG_DNXHD_PARSER 0
+ #define CONFIG_DNXUC_PARSER 0
+@@ -1051,7 +1051,7 @@
+ #define CONFIG_H261_PARSER 0
+ #define CONFIG_H263_PARSER 0
+ #define CONFIG_H264_PARSER 1
+-#define CONFIG_HEVC_PARSER 0
++#define CONFIG_HEVC_PARSER 1
+ #define CONFIG_HDR_PARSER 0
+ #define CONFIG_IPU_PARSER 0
+ #define CONFIG_JPEG2000_PARSER 0
+@@ -1060,10 +1060,10 @@
+ #define CONFIG_LCEVC_PARSER 0
+ #define CONFIG_MISC4_PARSER 0
+ #define CONFIG_MJPEG_PARSER 0
+-#define CONFIG_MLP_PARSER 0
++#define CONFIG_MLP_PARSER 1
+ #define CONFIG_MPEG4VIDEO_PARSER 0
+ #define CONFIG_MPEGAUDIO_PARSER 1
+-#define CONFIG_MPEGVIDEO_PARSER 0
++#define CONFIG_MPEGVIDEO_PARSER 1
+ #define CONFIG_OPUS_PARSER 1
+ #define CONFIG_PRORES_PARSER 0
+ #define CONFIG_PNG_PARSER 0
+@@ -1711,7 +1711,7 @@
+ #define CONFIG_AA_DEMUXER 0
+ #define CONFIG_AAC_DEMUXER 1
+ #define CONFIG_AAX_DEMUXER 0
+-#define CONFIG_AC3_DEMUXER 0
++#define CONFIG_AC3_DEMUXER 1
+ #define CONFIG_AC4_DEMUXER 0
+ #define CONFIG_ACE_DEMUXER 0
+ #define CONFIG_ACM_DEMUXER 0
+@@ -1786,15 +1786,15 @@
+ #define CONFIG_DSF_DEMUXER 0
+ #define CONFIG_DSICIN_DEMUXER 0
+ #define CONFIG_DSS_DEMUXER 0
+-#define CONFIG_DTS_DEMUXER 0
+-#define CONFIG_DTSHD_DEMUXER 0
++#define CONFIG_DTS_DEMUXER 1
++#define CONFIG_DTSHD_DEMUXER 1
+ #define CONFIG_DV_DEMUXER 0
+ #define CONFIG_DVBSUB_DEMUXER 0
+ #define CONFIG_DVBTXT_DEMUXER 0
+ #define CONFIG_DXA_DEMUXER 0
+ #define CONFIG_EA_DEMUXER 0
+ #define CONFIG_EA_CDATA_DEMUXER 0
+-#define CONFIG_EAC3_DEMUXER 0
++#define CONFIG_EAC3_DEMUXER 1
+ #define CONFIG_EPAF_DEMUXER 0
+ #define CONFIG_EVC_DEMUXER 0
+ #define CONFIG_FFMETADATA_DEMUXER 0
+@@ -1869,7 +1869,7 @@
+ #define CONFIG_MICRODVD_DEMUXER 0
+ #define CONFIG_MJPEG_DEMUXER 0
+ #define CONFIG_MJPEG_2000_DEMUXER 0
+-#define CONFIG_MLP_DEMUXER 0
++#define CONFIG_MLP_DEMUXER 1
+ #define CONFIG_MLV_DEMUXER 0
+ #define CONFIG_MM_DEMUXER 0
+ #define CONFIG_MMF_DEMUXER 0
+@@ -1879,10 +1879,10 @@
+ #define CONFIG_MP3_DEMUXER 1
+ #define CONFIG_MPC_DEMUXER 0
+ #define CONFIG_MPC8_DEMUXER 0
+-#define CONFIG_MPEGPS_DEMUXER 0
+-#define CONFIG_MPEGTS_DEMUXER 0
++#define CONFIG_MPEGPS_DEMUXER 1
++#define CONFIG_MPEGTS_DEMUXER 1
+ #define CONFIG_MPEGTSRAW_DEMUXER 0
+-#define CONFIG_MPEGVIDEO_DEMUXER 0
++#define CONFIG_MPEGVIDEO_DEMUXER 1
+ #define CONFIG_MPJPEG_DEMUXER 0
+ #define CONFIG_MPL2_DEMUXER 0
+ #define CONFIG_MPSUB_DEMUXER 0
+@@ -1991,7 +1991,7 @@
+ #define CONFIG_THREEDOSTR_DEMUXER 0
+ #define CONFIG_TIERTEXSEQ_DEMUXER 0
+ #define CONFIG_TMV_DEMUXER 0
+-#define CONFIG_TRUEHD_DEMUXER 0
++#define CONFIG_TRUEHD_DEMUXER 1
+ #define CONFIG_TTA_DEMUXER 0
+ #define CONFIG_TXD_DEMUXER 0
+ #define CONFIG_TTY_DEMUXER 0
+diff --git a/chromium/config/Chrome/linux/x64/libavcodec/codec_list.c b/chromium/config/Chrome/linux/x64/libavcodec/codec_list.c
+index fe5adb0..66170c5 100644
+--- a/chromium/config/Chrome/linux/x64/libavcodec/codec_list.c
++++ b/chromium/config/Chrome/linux/x64/libavcodec/codec_list.c
+@@ -14,4 +14,15 @@ static const FFCodec * const codec_list[] = {
+     &ff_pcm_s32le_decoder,
+     &ff_pcm_u8_decoder,
+     &ff_libopus_decoder,
++    &ff_hevc_decoder,
++    &ff_ac3_decoder,
++    &ff_eac3_decoder,
++    &ff_ac3_fixed_decoder,
++    &ff_dca_decoder,
++    &ff_truehd_decoder,
++    &ff_mlp_decoder,
++    &ff_mpeg2video_decoder,
++    &ff_mpeg1video_decoder,
++    &ff_mp2_decoder,
++    &ff_mp1_decoder,
+     NULL };
+diff --git a/chromium/config/Chrome/linux/x64/libavcodec/parser_list.c b/chromium/config/Chrome/linux/x64/libavcodec/parser_list.c
+index e3684b3..c057540 100644
+--- a/chromium/config/Chrome/linux/x64/libavcodec/parser_list.c
++++ b/chromium/config/Chrome/linux/x64/libavcodec/parser_list.c
+@@ -6,4 +6,9 @@ static const FFCodecParser * const parser_list[] = {
+     &ff_opus_parser,
+     &ff_vorbis_parser,
+     &ff_vp9_parser,
++    &ff_hevc_parser,
++    &ff_ac3_parser,
++    &ff_dca_parser,
++    &ff_mlp_parser,
++    &ff_mpegvideo_parser,
+     NULL };
+diff --git a/chromium/config/Chrome/linux/x64/libavformat/demuxer_list.c b/chromium/config/Chrome/linux/x64/libavformat/demuxer_list.c
+index 29f1f59..39ce7fc 100644
+--- a/chromium/config/Chrome/linux/x64/libavformat/demuxer_list.c
++++ b/chromium/config/Chrome/linux/x64/libavformat/demuxer_list.c
+@@ -6,4 +6,13 @@ static const FFInputFormat * const demuxer_list[] = {
+     &ff_mp3_demuxer,
+     &ff_ogg_demuxer,
+     &ff_wav_demuxer,
++    &ff_ac3_demuxer,
++    &ff_eac3_demuxer,
++    &ff_dts_demuxer,
++    &ff_dtshd_demuxer,
++    &ff_truehd_demuxer,
++    &ff_mlp_demuxer,
++    &ff_mpegps_demuxer,
++    &ff_mpegvideo_demuxer,
++    &ff_mpegts_demuxer,
+     NULL };
+diff --git a/chromium/config/Chrome/mac/arm64/config.h b/chromium/config/Chrome/mac/arm64/config.h
+index f67a0f3..f482149 100644
+--- a/chromium/config/Chrome/mac/arm64/config.h
++++ b/chromium/config/Chrome/mac/arm64/config.h
+@@ -698,7 +698,7 @@
+ #define CONFIG_FFPROBE 0
+ #define CONFIG_FFMPEG 0
+ #define CONFIG_DWT 0
+-#define CONFIG_ERROR_RESILIENCE 0
++#define CONFIG_ERROR_RESILIENCE 1
+ #define CONFIG_FAAN 0
+ #define CONFIG_FAST_UNALIGNED 1
+ #define CONFIG_IAMF 0
+@@ -731,13 +731,13 @@
+ #define CONFIG_MUXERS 0
+ #define CONFIG_PROTOCOLS 0
+ #define CONFIG_AANDCTTABLES 0
+-#define CONFIG_AC3DSP 0
++#define CONFIG_AC3DSP 1
+ #define CONFIG_ADTS_HEADER 1
+ #define CONFIG_ATSC_A53 1
+ #define CONFIG_AUDIO_FRAME_QUEUE 0
+ #define CONFIG_AUDIODSP 0
+-#define CONFIG_BLOCKDSP 0
+-#define CONFIG_BSWAPDSP 0
++#define CONFIG_BLOCKDSP 1
++#define CONFIG_BSWAPDSP 1
+ #define CONFIG_CABAC 1
+ #define CONFIG_CBS 0
+ #define CONFIG_CBS_APV 0
+@@ -779,15 +779,15 @@
+ #define CONFIG_H264PRED 1
+ #define CONFIG_H264QPEL 1
+ #define CONFIG_H264_SEI 1
+-#define CONFIG_HEVCPARSE 0
+-#define CONFIG_HEVC_SEI 0
+-#define CONFIG_HPELDSP 0
++#define CONFIG_HEVCPARSE 1
++#define CONFIG_HEVC_SEI 1
++#define CONFIG_HPELDSP 1
+ #define CONFIG_HUFFMAN 0
+ #define CONFIG_HUFFYUVDSP 0
+ #define CONFIG_HUFFYUVENCDSP 0
+ #define CONFIG_IAMFDEC 0
+ #define CONFIG_IAMFENC 0
+-#define CONFIG_IDCTDSP 0
++#define CONFIG_IDCTDSP 1
+ #define CONFIG_INFLATE_WRAPPER 0
+ #define CONFIG_INTRAX8 0
+ #define CONFIG_ISO_MEDIA 1
+@@ -803,14 +803,14 @@
+ #define CONFIG_LLVIDENCDSP 0
+ #define CONFIG_LPC 0
+ #define CONFIG_LZF 0
+-#define CONFIG_ME_CMP 0
+-#define CONFIG_MPEG_ER 0
++#define CONFIG_ME_CMP 1
++#define CONFIG_MPEG_ER 1
+ #define CONFIG_MPEGAUDIO 1
+ #define CONFIG_MPEGAUDIODSP 1
+ #define CONFIG_MPEGAUDIOHEADER 1
+ #define CONFIG_MPEG4AUDIO 1
+-#define CONFIG_MPEGVIDEO 0
+-#define CONFIG_MPEGVIDEODEC 0
++#define CONFIG_MPEGVIDEO 1
++#define CONFIG_MPEGVIDEODEC 1
+ #define CONFIG_MPEGVIDEOENC 0
+ #define CONFIG_MPEGVIDEOENCDSP 0
+ #define CONFIG_MSMPEG4DEC 0
+diff --git a/chromium/config/Chrome/mac/arm64/config_components.h b/chromium/config/Chrome/mac/arm64/config_components.h
+index 7168328..fc7abba 100644
+--- a/chromium/config/Chrome/mac/arm64/config_components.h
++++ b/chromium/config/Chrome/mac/arm64/config_components.h
+@@ -144,7 +144,7 @@
+ #define CONFIG_H264_QSV_DECODER 0
+ #define CONFIG_H264_RKMPP_DECODER 0
+ #define CONFIG_HAP_DECODER 0
+-#define CONFIG_HEVC_DECODER 0
++#define CONFIG_HEVC_DECODER 1
+ #define CONFIG_HEVC_QSV_DECODER 0
+ #define CONFIG_HEVC_RKMPP_DECODER 0
+ #define CONFIG_HEVC_V4L2M2M_DECODER 0
+@@ -182,8 +182,8 @@
+ #define CONFIG_MMVIDEO_DECODER 0
+ #define CONFIG_MOBICLIP_DECODER 0
+ #define CONFIG_MOTIONPIXELS_DECODER 0
+-#define CONFIG_MPEG1VIDEO_DECODER 0
+-#define CONFIG_MPEG2VIDEO_DECODER 0
++#define CONFIG_MPEG1VIDEO_DECODER 1
++#define CONFIG_MPEG2VIDEO_DECODER 1
+ #define CONFIG_MPEG4_DECODER 0
+ #define CONFIG_MPEG4_V4L2M2M_DECODER 0
+ #define CONFIG_MPEG4_MMAL_DECODER 0
+@@ -347,8 +347,8 @@
+ #define CONFIG_AAC_DECODER 1
+ #define CONFIG_AAC_FIXED_DECODER 0
+ #define CONFIG_AAC_LATM_DECODER 0
+-#define CONFIG_AC3_DECODER 0
+-#define CONFIG_AC3_FIXED_DECODER 0
++#define CONFIG_AC3_DECODER 1
++#define CONFIG_AC3_FIXED_DECODER 1
+ #define CONFIG_ACELP_KELVIN_DECODER 0
+ #define CONFIG_AHX_DECODER 0
+ #define CONFIG_ALAC_DECODER 0
+@@ -370,7 +370,7 @@
+ #define CONFIG_BMV_AUDIO_DECODER 0
+ #define CONFIG_BONK_DECODER 0
+ #define CONFIG_COOK_DECODER 0
+-#define CONFIG_DCA_DECODER 0
++#define CONFIG_DCA_DECODER 1
+ #define CONFIG_DFPWM_DECODER 0
+ #define CONFIG_DOLBY_E_DECODER 0
+ #define CONFIG_DSD_LSBF_DECODER 0
+@@ -380,7 +380,7 @@
+ #define CONFIG_DSICINAUDIO_DECODER 0
+ #define CONFIG_DSS_SP_DECODER 0
+ #define CONFIG_DST_DECODER 0
+-#define CONFIG_EAC3_DECODER 0
++#define CONFIG_EAC3_DECODER 1
+ #define CONFIG_EVRC_DECODER 0
+ #define CONFIG_FASTAUDIO_DECODER 0
+ #define CONFIG_FFWAVESYNTH_DECODER 0
+@@ -402,10 +402,10 @@
+ #define CONFIG_MACE6_DECODER 0
+ #define CONFIG_METASOUND_DECODER 0
+ #define CONFIG_MISC4_DECODER 0
+-#define CONFIG_MLP_DECODER 0
+-#define CONFIG_MP1_DECODER 0
++#define CONFIG_MLP_DECODER 1
++#define CONFIG_MP1_DECODER 1
+ #define CONFIG_MP1FLOAT_DECODER 0
+-#define CONFIG_MP2_DECODER 0
++#define CONFIG_MP2_DECODER 1
+ #define CONFIG_MP2FLOAT_DECODER 0
+ #define CONFIG_MP3FLOAT_DECODER 0
+ #define CONFIG_MP3_DECODER 1
+@@ -434,7 +434,7 @@
+ #define CONFIG_SIREN_DECODER 0
+ #define CONFIG_SMACKAUD_DECODER 0
+ #define CONFIG_TAK_DECODER 0
+-#define CONFIG_TRUEHD_DECODER 0
++#define CONFIG_TRUEHD_DECODER 1
+ #define CONFIG_TRUESPEECH_DECODER 0
+ #define CONFIG_TTA_DECODER 0
+ #define CONFIG_TWINVQ_DECODER 0
+@@ -1018,7 +1018,7 @@
+ #define CONFIG_WMV3_VDPAU_HWACCEL 0
+ #define CONFIG_AAC_PARSER 1
+ #define CONFIG_AAC_LATM_PARSER 0
+-#define CONFIG_AC3_PARSER 0
++#define CONFIG_AC3_PARSER 1
+ #define CONFIG_ADX_PARSER 0
+ #define CONFIG_AHX_PARSER 0
+ #define CONFIG_AMR_PARSER 0
+@@ -1030,7 +1030,7 @@
+ #define CONFIG_CAVSVIDEO_PARSER 0
+ #define CONFIG_COOK_PARSER 0
+ #define CONFIG_CRI_PARSER 0
+-#define CONFIG_DCA_PARSER 0
++#define CONFIG_DCA_PARSER 1
+ #define CONFIG_DIRAC_PARSER 0
+ #define CONFIG_DNXHD_PARSER 0
+ #define CONFIG_DNXUC_PARSER 0
+@@ -1051,7 +1051,7 @@
+ #define CONFIG_H261_PARSER 0
+ #define CONFIG_H263_PARSER 0
+ #define CONFIG_H264_PARSER 1
+-#define CONFIG_HEVC_PARSER 0
++#define CONFIG_HEVC_PARSER 1
+ #define CONFIG_HDR_PARSER 0
+ #define CONFIG_IPU_PARSER 0
+ #define CONFIG_JPEG2000_PARSER 0
+@@ -1060,10 +1060,10 @@
+ #define CONFIG_LCEVC_PARSER 0
+ #define CONFIG_MISC4_PARSER 0
+ #define CONFIG_MJPEG_PARSER 0
+-#define CONFIG_MLP_PARSER 0
++#define CONFIG_MLP_PARSER 1
+ #define CONFIG_MPEG4VIDEO_PARSER 0
+ #define CONFIG_MPEGAUDIO_PARSER 1
+-#define CONFIG_MPEGVIDEO_PARSER 0
++#define CONFIG_MPEGVIDEO_PARSER 1
+ #define CONFIG_OPUS_PARSER 1
+ #define CONFIG_PRORES_PARSER 0
+ #define CONFIG_PNG_PARSER 0
+@@ -1711,7 +1711,7 @@
+ #define CONFIG_AA_DEMUXER 0
+ #define CONFIG_AAC_DEMUXER 1
+ #define CONFIG_AAX_DEMUXER 0
+-#define CONFIG_AC3_DEMUXER 0
++#define CONFIG_AC3_DEMUXER 1
+ #define CONFIG_AC4_DEMUXER 0
+ #define CONFIG_ACE_DEMUXER 0
+ #define CONFIG_ACM_DEMUXER 0
+@@ -1786,15 +1786,15 @@
+ #define CONFIG_DSF_DEMUXER 0
+ #define CONFIG_DSICIN_DEMUXER 0
+ #define CONFIG_DSS_DEMUXER 0
+-#define CONFIG_DTS_DEMUXER 0
+-#define CONFIG_DTSHD_DEMUXER 0
++#define CONFIG_DTS_DEMUXER 1
++#define CONFIG_DTSHD_DEMUXER 1
+ #define CONFIG_DV_DEMUXER 0
+ #define CONFIG_DVBSUB_DEMUXER 0
+ #define CONFIG_DVBTXT_DEMUXER 0
+ #define CONFIG_DXA_DEMUXER 0
+ #define CONFIG_EA_DEMUXER 0
+ #define CONFIG_EA_CDATA_DEMUXER 0
+-#define CONFIG_EAC3_DEMUXER 0
++#define CONFIG_EAC3_DEMUXER 1
+ #define CONFIG_EPAF_DEMUXER 0
+ #define CONFIG_EVC_DEMUXER 0
+ #define CONFIG_FFMETADATA_DEMUXER 0
+@@ -1869,7 +1869,7 @@
+ #define CONFIG_MICRODVD_DEMUXER 0
+ #define CONFIG_MJPEG_DEMUXER 0
+ #define CONFIG_MJPEG_2000_DEMUXER 0
+-#define CONFIG_MLP_DEMUXER 0
++#define CONFIG_MLP_DEMUXER 1
+ #define CONFIG_MLV_DEMUXER 0
+ #define CONFIG_MM_DEMUXER 0
+ #define CONFIG_MMF_DEMUXER 0
+@@ -1879,10 +1879,10 @@
+ #define CONFIG_MP3_DEMUXER 1
+ #define CONFIG_MPC_DEMUXER 0
+ #define CONFIG_MPC8_DEMUXER 0
+-#define CONFIG_MPEGPS_DEMUXER 0
+-#define CONFIG_MPEGTS_DEMUXER 0
++#define CONFIG_MPEGPS_DEMUXER 1
++#define CONFIG_MPEGTS_DEMUXER 1
+ #define CONFIG_MPEGTSRAW_DEMUXER 0
+-#define CONFIG_MPEGVIDEO_DEMUXER 0
++#define CONFIG_MPEGVIDEO_DEMUXER 1
+ #define CONFIG_MPJPEG_DEMUXER 0
+ #define CONFIG_MPL2_DEMUXER 0
+ #define CONFIG_MPSUB_DEMUXER 0
+@@ -1991,7 +1991,7 @@
+ #define CONFIG_THREEDOSTR_DEMUXER 0
+ #define CONFIG_TIERTEXSEQ_DEMUXER 0
+ #define CONFIG_TMV_DEMUXER 0
+-#define CONFIG_TRUEHD_DEMUXER 0
++#define CONFIG_TRUEHD_DEMUXER 1
+ #define CONFIG_TTA_DEMUXER 0
+ #define CONFIG_TXD_DEMUXER 0
+ #define CONFIG_TTY_DEMUXER 0
+diff --git a/chromium/config/Chrome/mac/arm64/libavcodec/codec_list.c b/chromium/config/Chrome/mac/arm64/libavcodec/codec_list.c
+index fe5adb0..66170c5 100644
+--- a/chromium/config/Chrome/mac/arm64/libavcodec/codec_list.c
++++ b/chromium/config/Chrome/mac/arm64/libavcodec/codec_list.c
+@@ -14,4 +14,15 @@ static const FFCodec * const codec_list[] = {
+     &ff_pcm_s32le_decoder,
+     &ff_pcm_u8_decoder,
+     &ff_libopus_decoder,
++    &ff_hevc_decoder,
++    &ff_ac3_decoder,
++    &ff_eac3_decoder,
++    &ff_ac3_fixed_decoder,
++    &ff_dca_decoder,
++    &ff_truehd_decoder,
++    &ff_mlp_decoder,
++    &ff_mpeg2video_decoder,
++    &ff_mpeg1video_decoder,
++    &ff_mp2_decoder,
++    &ff_mp1_decoder,
+     NULL };
+diff --git a/chromium/config/Chrome/mac/arm64/libavcodec/parser_list.c b/chromium/config/Chrome/mac/arm64/libavcodec/parser_list.c
+index e3684b3..c057540 100644
+--- a/chromium/config/Chrome/mac/arm64/libavcodec/parser_list.c
++++ b/chromium/config/Chrome/mac/arm64/libavcodec/parser_list.c
+@@ -6,4 +6,9 @@ static const FFCodecParser * const parser_list[] = {
+     &ff_opus_parser,
+     &ff_vorbis_parser,
+     &ff_vp9_parser,
++    &ff_hevc_parser,
++    &ff_ac3_parser,
++    &ff_dca_parser,
++    &ff_mlp_parser,
++    &ff_mpegvideo_parser,
+     NULL };
+diff --git a/chromium/config/Chrome/mac/arm64/libavformat/demuxer_list.c b/chromium/config/Chrome/mac/arm64/libavformat/demuxer_list.c
+index 29f1f59..39ce7fc 100644
+--- a/chromium/config/Chrome/mac/arm64/libavformat/demuxer_list.c
++++ b/chromium/config/Chrome/mac/arm64/libavformat/demuxer_list.c
+@@ -6,4 +6,13 @@ static const FFInputFormat * const demuxer_list[] = {
+     &ff_mp3_demuxer,
+     &ff_ogg_demuxer,
+     &ff_wav_demuxer,
++    &ff_ac3_demuxer,
++    &ff_eac3_demuxer,
++    &ff_dts_demuxer,
++    &ff_dtshd_demuxer,
++    &ff_truehd_demuxer,
++    &ff_mlp_demuxer,
++    &ff_mpegps_demuxer,
++    &ff_mpegvideo_demuxer,
++    &ff_mpegts_demuxer,
+     NULL };
+diff --git a/chromium/config/Chrome/mac/x64/config.asm b/chromium/config/Chrome/mac/x64/config.asm
+index fd59606..8e954d6 100644
+--- a/chromium/config/Chrome/mac/x64/config.asm
++++ b/chromium/config/Chrome/mac/x64/config.asm
+@@ -683,7 +683,7 @@
+ %define CONFIG_FFPROBE 0
+ %define CONFIG_FFMPEG 0
+ %define CONFIG_DWT 0
+-%define CONFIG_ERROR_RESILIENCE 0
++%define CONFIG_ERROR_RESILIENCE 1
+ %define CONFIG_FAAN 0
+ %define CONFIG_FAST_UNALIGNED 1
+ %define CONFIG_IAMF 0
+@@ -716,13 +716,13 @@
+ %define CONFIG_MUXERS 0
+ %define CONFIG_PROTOCOLS 0
+ %define CONFIG_AANDCTTABLES 0
+-%define CONFIG_AC3DSP 0
++%define CONFIG_AC3DSP 1
+ %define CONFIG_ADTS_HEADER 1
+ %define CONFIG_ATSC_A53 1
+ %define CONFIG_AUDIO_FRAME_QUEUE 0
+ %define CONFIG_AUDIODSP 0
+-%define CONFIG_BLOCKDSP 0
+-%define CONFIG_BSWAPDSP 0
++%define CONFIG_BLOCKDSP 1
++%define CONFIG_BSWAPDSP 1
+ %define CONFIG_CABAC 1
+ %define CONFIG_CBS 0
+ %define CONFIG_CBS_APV 0
+@@ -764,15 +764,15 @@
+ %define CONFIG_H264PRED 1
+ %define CONFIG_H264QPEL 1
+ %define CONFIG_H264_SEI 1
+-%define CONFIG_HEVCPARSE 0
+-%define CONFIG_HEVC_SEI 0
+-%define CONFIG_HPELDSP 0
++%define CONFIG_HEVCPARSE 1
++%define CONFIG_HEVC_SEI 1
++%define CONFIG_HPELDSP 1
+ %define CONFIG_HUFFMAN 0
+ %define CONFIG_HUFFYUVDSP 0
+ %define CONFIG_HUFFYUVENCDSP 0
+ %define CONFIG_IAMFDEC 0
+ %define CONFIG_IAMFENC 0
+-%define CONFIG_IDCTDSP 0
++%define CONFIG_IDCTDSP 1
+ %define CONFIG_INFLATE_WRAPPER 0
+ %define CONFIG_INTRAX8 0
+ %define CONFIG_ISO_MEDIA 1
+@@ -788,14 +788,14 @@
+ %define CONFIG_LLVIDENCDSP 0
+ %define CONFIG_LPC 0
+ %define CONFIG_LZF 0
+-%define CONFIG_ME_CMP 0
+-%define CONFIG_MPEG_ER 0
++%define CONFIG_ME_CMP 1
++%define CONFIG_MPEG_ER 1
+ %define CONFIG_MPEGAUDIO 1
+ %define CONFIG_MPEGAUDIODSP 1
+ %define CONFIG_MPEGAUDIOHEADER 1
+ %define CONFIG_MPEG4AUDIO 1
+-%define CONFIG_MPEGVIDEO 0
+-%define CONFIG_MPEGVIDEODEC 0
++%define CONFIG_MPEGVIDEO 1
++%define CONFIG_MPEGVIDEODEC 1
+ %define CONFIG_MPEGVIDEOENC 0
+ %define CONFIG_MPEGVIDEOENCDSP 0
+ %define CONFIG_MSMPEG4DEC 0
+diff --git a/chromium/config/Chrome/mac/x64/config.h b/chromium/config/Chrome/mac/x64/config.h
+index 4841b4e..85d46c5 100644
+--- a/chromium/config/Chrome/mac/x64/config.h
++++ b/chromium/config/Chrome/mac/x64/config.h
+@@ -697,7 +697,7 @@
+ #define CONFIG_FFPROBE 0
+ #define CONFIG_FFMPEG 0
+ #define CONFIG_DWT 0
+-#define CONFIG_ERROR_RESILIENCE 0
++#define CONFIG_ERROR_RESILIENCE 1
+ #define CONFIG_FAAN 0
+ #define CONFIG_FAST_UNALIGNED 1
+ #define CONFIG_IAMF 0
+@@ -730,13 +730,13 @@
+ #define CONFIG_MUXERS 0
+ #define CONFIG_PROTOCOLS 0
+ #define CONFIG_AANDCTTABLES 0
+-#define CONFIG_AC3DSP 0
++#define CONFIG_AC3DSP 1
+ #define CONFIG_ADTS_HEADER 1
+ #define CONFIG_ATSC_A53 1
+ #define CONFIG_AUDIO_FRAME_QUEUE 0
+ #define CONFIG_AUDIODSP 0
+-#define CONFIG_BLOCKDSP 0
+-#define CONFIG_BSWAPDSP 0
++#define CONFIG_BLOCKDSP 1
++#define CONFIG_BSWAPDSP 1
+ #define CONFIG_CABAC 1
+ #define CONFIG_CBS 0
+ #define CONFIG_CBS_APV 0
+@@ -778,15 +778,15 @@
+ #define CONFIG_H264PRED 1
+ #define CONFIG_H264QPEL 1
+ #define CONFIG_H264_SEI 1
+-#define CONFIG_HEVCPARSE 0
+-#define CONFIG_HEVC_SEI 0
+-#define CONFIG_HPELDSP 0
++#define CONFIG_HEVCPARSE 1
++#define CONFIG_HEVC_SEI 1
++#define CONFIG_HPELDSP 1
+ #define CONFIG_HUFFMAN 0
+ #define CONFIG_HUFFYUVDSP 0
+ #define CONFIG_HUFFYUVENCDSP 0
+ #define CONFIG_IAMFDEC 0
+ #define CONFIG_IAMFENC 0
+-#define CONFIG_IDCTDSP 0
++#define CONFIG_IDCTDSP 1
+ #define CONFIG_INFLATE_WRAPPER 0
+ #define CONFIG_INTRAX8 0
+ #define CONFIG_ISO_MEDIA 1
+@@ -802,14 +802,14 @@
+ #define CONFIG_LLVIDENCDSP 0
+ #define CONFIG_LPC 0
+ #define CONFIG_LZF 0
+-#define CONFIG_ME_CMP 0
+-#define CONFIG_MPEG_ER 0
++#define CONFIG_ME_CMP 1
++#define CONFIG_MPEG_ER 1
+ #define CONFIG_MPEGAUDIO 1
+ #define CONFIG_MPEGAUDIODSP 1
+ #define CONFIG_MPEGAUDIOHEADER 1
+ #define CONFIG_MPEG4AUDIO 1
+-#define CONFIG_MPEGVIDEO 0
+-#define CONFIG_MPEGVIDEODEC 0
++#define CONFIG_MPEGVIDEO 1
++#define CONFIG_MPEGVIDEODEC 1
+ #define CONFIG_MPEGVIDEOENC 0
+ #define CONFIG_MPEGVIDEOENCDSP 0
+ #define CONFIG_MSMPEG4DEC 0
+diff --git a/chromium/config/Chrome/mac/x64/config_components.asm b/chromium/config/Chrome/mac/x64/config_components.asm
+index 695266e..31960dd 100644
+--- a/chromium/config/Chrome/mac/x64/config_components.asm
++++ b/chromium/config/Chrome/mac/x64/config_components.asm
+@@ -142,7 +142,7 @@
+ %define CONFIG_H264_QSV_DECODER 0
+ %define CONFIG_H264_RKMPP_DECODER 0
+ %define CONFIG_HAP_DECODER 0
+-%define CONFIG_HEVC_DECODER 0
++%define CONFIG_HEVC_DECODER 1
+ %define CONFIG_HEVC_QSV_DECODER 0
+ %define CONFIG_HEVC_RKMPP_DECODER 0
+ %define CONFIG_HEVC_V4L2M2M_DECODER 0
+@@ -180,8 +180,8 @@
+ %define CONFIG_MMVIDEO_DECODER 0
+ %define CONFIG_MOBICLIP_DECODER 0
+ %define CONFIG_MOTIONPIXELS_DECODER 0
+-%define CONFIG_MPEG1VIDEO_DECODER 0
+-%define CONFIG_MPEG2VIDEO_DECODER 0
++%define CONFIG_MPEG1VIDEO_DECODER 1
++%define CONFIG_MPEG2VIDEO_DECODER 1
+ %define CONFIG_MPEG4_DECODER 0
+ %define CONFIG_MPEG4_V4L2M2M_DECODER 0
+ %define CONFIG_MPEG4_MMAL_DECODER 0
+@@ -345,8 +345,8 @@
+ %define CONFIG_AAC_DECODER 1
+ %define CONFIG_AAC_FIXED_DECODER 0
+ %define CONFIG_AAC_LATM_DECODER 0
+-%define CONFIG_AC3_DECODER 0
+-%define CONFIG_AC3_FIXED_DECODER 0
++%define CONFIG_AC3_DECODER 1
++%define CONFIG_AC3_FIXED_DECODER 1
+ %define CONFIG_ACELP_KELVIN_DECODER 0
+ %define CONFIG_AHX_DECODER 0
+ %define CONFIG_ALAC_DECODER 0
+@@ -368,7 +368,7 @@
+ %define CONFIG_BMV_AUDIO_DECODER 0
+ %define CONFIG_BONK_DECODER 0
+ %define CONFIG_COOK_DECODER 0
+-%define CONFIG_DCA_DECODER 0
++%define CONFIG_DCA_DECODER 1
+ %define CONFIG_DFPWM_DECODER 0
+ %define CONFIG_DOLBY_E_DECODER 0
+ %define CONFIG_DSD_LSBF_DECODER 0
+@@ -378,7 +378,7 @@
+ %define CONFIG_DSICINAUDIO_DECODER 0
+ %define CONFIG_DSS_SP_DECODER 0
+ %define CONFIG_DST_DECODER 0
+-%define CONFIG_EAC3_DECODER 0
++%define CONFIG_EAC3_DECODER 1
+ %define CONFIG_EVRC_DECODER 0
+ %define CONFIG_FASTAUDIO_DECODER 0
+ %define CONFIG_FFWAVESYNTH_DECODER 0
+@@ -400,10 +400,10 @@
+ %define CONFIG_MACE6_DECODER 0
+ %define CONFIG_METASOUND_DECODER 0
+ %define CONFIG_MISC4_DECODER 0
+-%define CONFIG_MLP_DECODER 0
+-%define CONFIG_MP1_DECODER 0
++%define CONFIG_MLP_DECODER 1
++%define CONFIG_MP1_DECODER 1
+ %define CONFIG_MP1FLOAT_DECODER 0
+-%define CONFIG_MP2_DECODER 0
++%define CONFIG_MP2_DECODER 1
+ %define CONFIG_MP2FLOAT_DECODER 0
+ %define CONFIG_MP3FLOAT_DECODER 0
+ %define CONFIG_MP3_DECODER 1
+@@ -432,7 +432,7 @@
+ %define CONFIG_SIREN_DECODER 0
+ %define CONFIG_SMACKAUD_DECODER 0
+ %define CONFIG_TAK_DECODER 0
+-%define CONFIG_TRUEHD_DECODER 0
++%define CONFIG_TRUEHD_DECODER 1
+ %define CONFIG_TRUESPEECH_DECODER 0
+ %define CONFIG_TTA_DECODER 0
+ %define CONFIG_TWINVQ_DECODER 0
+@@ -1016,7 +1016,7 @@
+ %define CONFIG_WMV3_VDPAU_HWACCEL 0
+ %define CONFIG_AAC_PARSER 1
+ %define CONFIG_AAC_LATM_PARSER 0
+-%define CONFIG_AC3_PARSER 0
++%define CONFIG_AC3_PARSER 1
+ %define CONFIG_ADX_PARSER 0
+ %define CONFIG_AHX_PARSER 0
+ %define CONFIG_AMR_PARSER 0
+@@ -1028,7 +1028,7 @@
+ %define CONFIG_CAVSVIDEO_PARSER 0
+ %define CONFIG_COOK_PARSER 0
+ %define CONFIG_CRI_PARSER 0
+-%define CONFIG_DCA_PARSER 0
++%define CONFIG_DCA_PARSER 1
+ %define CONFIG_DIRAC_PARSER 0
+ %define CONFIG_DNXHD_PARSER 0
+ %define CONFIG_DNXUC_PARSER 0
+@@ -1049,7 +1049,7 @@
+ %define CONFIG_H261_PARSER 0
+ %define CONFIG_H263_PARSER 0
+ %define CONFIG_H264_PARSER 1
+-%define CONFIG_HEVC_PARSER 0
++%define CONFIG_HEVC_PARSER 1
+ %define CONFIG_HDR_PARSER 0
+ %define CONFIG_IPU_PARSER 0
+ %define CONFIG_JPEG2000_PARSER 0
+@@ -1058,10 +1058,10 @@
+ %define CONFIG_LCEVC_PARSER 0
+ %define CONFIG_MISC4_PARSER 0
+ %define CONFIG_MJPEG_PARSER 0
+-%define CONFIG_MLP_PARSER 0
++%define CONFIG_MLP_PARSER 1
+ %define CONFIG_MPEG4VIDEO_PARSER 0
+ %define CONFIG_MPEGAUDIO_PARSER 1
+-%define CONFIG_MPEGVIDEO_PARSER 0
++%define CONFIG_MPEGVIDEO_PARSER 1
+ %define CONFIG_OPUS_PARSER 1
+ %define CONFIG_PRORES_PARSER 0
+ %define CONFIG_PNG_PARSER 0
+@@ -1709,7 +1709,7 @@
+ %define CONFIG_AA_DEMUXER 0
+ %define CONFIG_AAC_DEMUXER 1
+ %define CONFIG_AAX_DEMUXER 0
+-%define CONFIG_AC3_DEMUXER 0
++%define CONFIG_AC3_DEMUXER 1
+ %define CONFIG_AC4_DEMUXER 0
+ %define CONFIG_ACE_DEMUXER 0
+ %define CONFIG_ACM_DEMUXER 0
+@@ -1784,15 +1784,15 @@
+ %define CONFIG_DSF_DEMUXER 0
+ %define CONFIG_DSICIN_DEMUXER 0
+ %define CONFIG_DSS_DEMUXER 0
+-%define CONFIG_DTS_DEMUXER 0
+-%define CONFIG_DTSHD_DEMUXER 0
++%define CONFIG_DTS_DEMUXER 1
++%define CONFIG_DTSHD_DEMUXER 1
+ %define CONFIG_DV_DEMUXER 0
+ %define CONFIG_DVBSUB_DEMUXER 0
+ %define CONFIG_DVBTXT_DEMUXER 0
+ %define CONFIG_DXA_DEMUXER 0
+ %define CONFIG_EA_DEMUXER 0
+ %define CONFIG_EA_CDATA_DEMUXER 0
+-%define CONFIG_EAC3_DEMUXER 0
++%define CONFIG_EAC3_DEMUXER 1
+ %define CONFIG_EPAF_DEMUXER 0
+ %define CONFIG_EVC_DEMUXER 0
+ %define CONFIG_FFMETADATA_DEMUXER 0
+@@ -1867,7 +1867,7 @@
+ %define CONFIG_MICRODVD_DEMUXER 0
+ %define CONFIG_MJPEG_DEMUXER 0
+ %define CONFIG_MJPEG_2000_DEMUXER 0
+-%define CONFIG_MLP_DEMUXER 0
++%define CONFIG_MLP_DEMUXER 1
+ %define CONFIG_MLV_DEMUXER 0
+ %define CONFIG_MM_DEMUXER 0
+ %define CONFIG_MMF_DEMUXER 0
+@@ -1877,10 +1877,10 @@
+ %define CONFIG_MP3_DEMUXER 1
+ %define CONFIG_MPC_DEMUXER 0
+ %define CONFIG_MPC8_DEMUXER 0
+-%define CONFIG_MPEGPS_DEMUXER 0
+-%define CONFIG_MPEGTS_DEMUXER 0
++%define CONFIG_MPEGPS_DEMUXER 1
++%define CONFIG_MPEGTS_DEMUXER 1
+ %define CONFIG_MPEGTSRAW_DEMUXER 0
+-%define CONFIG_MPEGVIDEO_DEMUXER 0
++%define CONFIG_MPEGVIDEO_DEMUXER 1
+ %define CONFIG_MPJPEG_DEMUXER 0
+ %define CONFIG_MPL2_DEMUXER 0
+ %define CONFIG_MPSUB_DEMUXER 0
+@@ -1989,7 +1989,7 @@
+ %define CONFIG_THREEDOSTR_DEMUXER 0
+ %define CONFIG_TIERTEXSEQ_DEMUXER 0
+ %define CONFIG_TMV_DEMUXER 0
+-%define CONFIG_TRUEHD_DEMUXER 0
++%define CONFIG_TRUEHD_DEMUXER 1
+ %define CONFIG_TTA_DEMUXER 0
+ %define CONFIG_TXD_DEMUXER 0
+ %define CONFIG_TTY_DEMUXER 0
+diff --git a/chromium/config/Chrome/mac/x64/config_components.h b/chromium/config/Chrome/mac/x64/config_components.h
+index 7168328..fc7abba 100644
+--- a/chromium/config/Chrome/mac/x64/config_components.h
++++ b/chromium/config/Chrome/mac/x64/config_components.h
+@@ -144,7 +144,7 @@
+ #define CONFIG_H264_QSV_DECODER 0
+ #define CONFIG_H264_RKMPP_DECODER 0
+ #define CONFIG_HAP_DECODER 0
+-#define CONFIG_HEVC_DECODER 0
++#define CONFIG_HEVC_DECODER 1
+ #define CONFIG_HEVC_QSV_DECODER 0
+ #define CONFIG_HEVC_RKMPP_DECODER 0
+ #define CONFIG_HEVC_V4L2M2M_DECODER 0
+@@ -182,8 +182,8 @@
+ #define CONFIG_MMVIDEO_DECODER 0
+ #define CONFIG_MOBICLIP_DECODER 0
+ #define CONFIG_MOTIONPIXELS_DECODER 0
+-#define CONFIG_MPEG1VIDEO_DECODER 0
+-#define CONFIG_MPEG2VIDEO_DECODER 0
++#define CONFIG_MPEG1VIDEO_DECODER 1
++#define CONFIG_MPEG2VIDEO_DECODER 1
+ #define CONFIG_MPEG4_DECODER 0
+ #define CONFIG_MPEG4_V4L2M2M_DECODER 0
+ #define CONFIG_MPEG4_MMAL_DECODER 0
+@@ -347,8 +347,8 @@
+ #define CONFIG_AAC_DECODER 1
+ #define CONFIG_AAC_FIXED_DECODER 0
+ #define CONFIG_AAC_LATM_DECODER 0
+-#define CONFIG_AC3_DECODER 0
+-#define CONFIG_AC3_FIXED_DECODER 0
++#define CONFIG_AC3_DECODER 1
++#define CONFIG_AC3_FIXED_DECODER 1
+ #define CONFIG_ACELP_KELVIN_DECODER 0
+ #define CONFIG_AHX_DECODER 0
+ #define CONFIG_ALAC_DECODER 0
+@@ -370,7 +370,7 @@
+ #define CONFIG_BMV_AUDIO_DECODER 0
+ #define CONFIG_BONK_DECODER 0
+ #define CONFIG_COOK_DECODER 0
+-#define CONFIG_DCA_DECODER 0
++#define CONFIG_DCA_DECODER 1
+ #define CONFIG_DFPWM_DECODER 0
+ #define CONFIG_DOLBY_E_DECODER 0
+ #define CONFIG_DSD_LSBF_DECODER 0
+@@ -380,7 +380,7 @@
+ #define CONFIG_DSICINAUDIO_DECODER 0
+ #define CONFIG_DSS_SP_DECODER 0
+ #define CONFIG_DST_DECODER 0
+-#define CONFIG_EAC3_DECODER 0
++#define CONFIG_EAC3_DECODER 1
+ #define CONFIG_EVRC_DECODER 0
+ #define CONFIG_FASTAUDIO_DECODER 0
+ #define CONFIG_FFWAVESYNTH_DECODER 0
+@@ -402,10 +402,10 @@
+ #define CONFIG_MACE6_DECODER 0
+ #define CONFIG_METASOUND_DECODER 0
+ #define CONFIG_MISC4_DECODER 0
+-#define CONFIG_MLP_DECODER 0
+-#define CONFIG_MP1_DECODER 0
++#define CONFIG_MLP_DECODER 1
++#define CONFIG_MP1_DECODER 1
+ #define CONFIG_MP1FLOAT_DECODER 0
+-#define CONFIG_MP2_DECODER 0
++#define CONFIG_MP2_DECODER 1
+ #define CONFIG_MP2FLOAT_DECODER 0
+ #define CONFIG_MP3FLOAT_DECODER 0
+ #define CONFIG_MP3_DECODER 1
+@@ -434,7 +434,7 @@
+ #define CONFIG_SIREN_DECODER 0
+ #define CONFIG_SMACKAUD_DECODER 0
+ #define CONFIG_TAK_DECODER 0
+-#define CONFIG_TRUEHD_DECODER 0
++#define CONFIG_TRUEHD_DECODER 1
+ #define CONFIG_TRUESPEECH_DECODER 0
+ #define CONFIG_TTA_DECODER 0
+ #define CONFIG_TWINVQ_DECODER 0
+@@ -1018,7 +1018,7 @@
+ #define CONFIG_WMV3_VDPAU_HWACCEL 0
+ #define CONFIG_AAC_PARSER 1
+ #define CONFIG_AAC_LATM_PARSER 0
+-#define CONFIG_AC3_PARSER 0
++#define CONFIG_AC3_PARSER 1
+ #define CONFIG_ADX_PARSER 0
+ #define CONFIG_AHX_PARSER 0
+ #define CONFIG_AMR_PARSER 0
+@@ -1030,7 +1030,7 @@
+ #define CONFIG_CAVSVIDEO_PARSER 0
+ #define CONFIG_COOK_PARSER 0
+ #define CONFIG_CRI_PARSER 0
+-#define CONFIG_DCA_PARSER 0
++#define CONFIG_DCA_PARSER 1
+ #define CONFIG_DIRAC_PARSER 0
+ #define CONFIG_DNXHD_PARSER 0
+ #define CONFIG_DNXUC_PARSER 0
+@@ -1051,7 +1051,7 @@
+ #define CONFIG_H261_PARSER 0
+ #define CONFIG_H263_PARSER 0
+ #define CONFIG_H264_PARSER 1
+-#define CONFIG_HEVC_PARSER 0
++#define CONFIG_HEVC_PARSER 1
+ #define CONFIG_HDR_PARSER 0
+ #define CONFIG_IPU_PARSER 0
+ #define CONFIG_JPEG2000_PARSER 0
+@@ -1060,10 +1060,10 @@
+ #define CONFIG_LCEVC_PARSER 0
+ #define CONFIG_MISC4_PARSER 0
+ #define CONFIG_MJPEG_PARSER 0
+-#define CONFIG_MLP_PARSER 0
++#define CONFIG_MLP_PARSER 1
+ #define CONFIG_MPEG4VIDEO_PARSER 0
+ #define CONFIG_MPEGAUDIO_PARSER 1
+-#define CONFIG_MPEGVIDEO_PARSER 0
++#define CONFIG_MPEGVIDEO_PARSER 1
+ #define CONFIG_OPUS_PARSER 1
+ #define CONFIG_PRORES_PARSER 0
+ #define CONFIG_PNG_PARSER 0
+@@ -1711,7 +1711,7 @@
+ #define CONFIG_AA_DEMUXER 0
+ #define CONFIG_AAC_DEMUXER 1
+ #define CONFIG_AAX_DEMUXER 0
+-#define CONFIG_AC3_DEMUXER 0
++#define CONFIG_AC3_DEMUXER 1
+ #define CONFIG_AC4_DEMUXER 0
+ #define CONFIG_ACE_DEMUXER 0
+ #define CONFIG_ACM_DEMUXER 0
+@@ -1786,15 +1786,15 @@
+ #define CONFIG_DSF_DEMUXER 0
+ #define CONFIG_DSICIN_DEMUXER 0
+ #define CONFIG_DSS_DEMUXER 0
+-#define CONFIG_DTS_DEMUXER 0
+-#define CONFIG_DTSHD_DEMUXER 0
++#define CONFIG_DTS_DEMUXER 1
++#define CONFIG_DTSHD_DEMUXER 1
+ #define CONFIG_DV_DEMUXER 0
+ #define CONFIG_DVBSUB_DEMUXER 0
+ #define CONFIG_DVBTXT_DEMUXER 0
+ #define CONFIG_DXA_DEMUXER 0
+ #define CONFIG_EA_DEMUXER 0
+ #define CONFIG_EA_CDATA_DEMUXER 0
+-#define CONFIG_EAC3_DEMUXER 0
++#define CONFIG_EAC3_DEMUXER 1
+ #define CONFIG_EPAF_DEMUXER 0
+ #define CONFIG_EVC_DEMUXER 0
+ #define CONFIG_FFMETADATA_DEMUXER 0
+@@ -1869,7 +1869,7 @@
+ #define CONFIG_MICRODVD_DEMUXER 0
+ #define CONFIG_MJPEG_DEMUXER 0
+ #define CONFIG_MJPEG_2000_DEMUXER 0
+-#define CONFIG_MLP_DEMUXER 0
++#define CONFIG_MLP_DEMUXER 1
+ #define CONFIG_MLV_DEMUXER 0
+ #define CONFIG_MM_DEMUXER 0
+ #define CONFIG_MMF_DEMUXER 0
+@@ -1879,10 +1879,10 @@
+ #define CONFIG_MP3_DEMUXER 1
+ #define CONFIG_MPC_DEMUXER 0
+ #define CONFIG_MPC8_DEMUXER 0
+-#define CONFIG_MPEGPS_DEMUXER 0
+-#define CONFIG_MPEGTS_DEMUXER 0
++#define CONFIG_MPEGPS_DEMUXER 1
++#define CONFIG_MPEGTS_DEMUXER 1
+ #define CONFIG_MPEGTSRAW_DEMUXER 0
+-#define CONFIG_MPEGVIDEO_DEMUXER 0
++#define CONFIG_MPEGVIDEO_DEMUXER 1
+ #define CONFIG_MPJPEG_DEMUXER 0
+ #define CONFIG_MPL2_DEMUXER 0
+ #define CONFIG_MPSUB_DEMUXER 0
+@@ -1991,7 +1991,7 @@
+ #define CONFIG_THREEDOSTR_DEMUXER 0
+ #define CONFIG_TIERTEXSEQ_DEMUXER 0
+ #define CONFIG_TMV_DEMUXER 0
+-#define CONFIG_TRUEHD_DEMUXER 0
++#define CONFIG_TRUEHD_DEMUXER 1
+ #define CONFIG_TTA_DEMUXER 0
+ #define CONFIG_TXD_DEMUXER 0
+ #define CONFIG_TTY_DEMUXER 0
+diff --git a/chromium/config/Chrome/mac/x64/libavcodec/codec_list.c b/chromium/config/Chrome/mac/x64/libavcodec/codec_list.c
+index fe5adb0..66170c5 100644
+--- a/chromium/config/Chrome/mac/x64/libavcodec/codec_list.c
++++ b/chromium/config/Chrome/mac/x64/libavcodec/codec_list.c
+@@ -14,4 +14,15 @@ static const FFCodec * const codec_list[] = {
+     &ff_pcm_s32le_decoder,
+     &ff_pcm_u8_decoder,
+     &ff_libopus_decoder,
++    &ff_hevc_decoder,
++    &ff_ac3_decoder,
++    &ff_eac3_decoder,
++    &ff_ac3_fixed_decoder,
++    &ff_dca_decoder,
++    &ff_truehd_decoder,
++    &ff_mlp_decoder,
++    &ff_mpeg2video_decoder,
++    &ff_mpeg1video_decoder,
++    &ff_mp2_decoder,
++    &ff_mp1_decoder,
+     NULL };
+diff --git a/chromium/config/Chrome/mac/x64/libavcodec/parser_list.c b/chromium/config/Chrome/mac/x64/libavcodec/parser_list.c
+index e3684b3..c057540 100644
+--- a/chromium/config/Chrome/mac/x64/libavcodec/parser_list.c
++++ b/chromium/config/Chrome/mac/x64/libavcodec/parser_list.c
+@@ -6,4 +6,9 @@ static const FFCodecParser * const parser_list[] = {
+     &ff_opus_parser,
+     &ff_vorbis_parser,
+     &ff_vp9_parser,
++    &ff_hevc_parser,
++    &ff_ac3_parser,
++    &ff_dca_parser,
++    &ff_mlp_parser,
++    &ff_mpegvideo_parser,
+     NULL };
+diff --git a/chromium/config/Chrome/mac/x64/libavformat/demuxer_list.c b/chromium/config/Chrome/mac/x64/libavformat/demuxer_list.c
+index 29f1f59..39ce7fc 100644
+--- a/chromium/config/Chrome/mac/x64/libavformat/demuxer_list.c
++++ b/chromium/config/Chrome/mac/x64/libavformat/demuxer_list.c
+@@ -6,4 +6,13 @@ static const FFInputFormat * const demuxer_list[] = {
+     &ff_mp3_demuxer,
+     &ff_ogg_demuxer,
+     &ff_wav_demuxer,
++    &ff_ac3_demuxer,
++    &ff_eac3_demuxer,
++    &ff_dts_demuxer,
++    &ff_dtshd_demuxer,
++    &ff_truehd_demuxer,
++    &ff_mlp_demuxer,
++    &ff_mpegps_demuxer,
++    &ff_mpegvideo_demuxer,
++    &ff_mpegts_demuxer,
+     NULL };
+diff --git a/chromium/config/Chrome/win/x64/config.asm b/chromium/config/Chrome/win/x64/config.asm
+index efaf02d..c0cae98 100644
+--- a/chromium/config/Chrome/win/x64/config.asm
++++ b/chromium/config/Chrome/win/x64/config.asm
+@@ -683,7 +683,7 @@
+ %define CONFIG_FFPROBE 0
+ %define CONFIG_FFMPEG 0
+ %define CONFIG_DWT 0
+-%define CONFIG_ERROR_RESILIENCE 0
++%define CONFIG_ERROR_RESILIENCE 1
+ %define CONFIG_FAAN 0
+ %define CONFIG_FAST_UNALIGNED 1
+ %define CONFIG_IAMF 0
+@@ -716,13 +716,13 @@
+ %define CONFIG_MUXERS 0
+ %define CONFIG_PROTOCOLS 0
+ %define CONFIG_AANDCTTABLES 0
+-%define CONFIG_AC3DSP 0
++%define CONFIG_AC3DSP 1
+ %define CONFIG_ADTS_HEADER 1
+ %define CONFIG_ATSC_A53 1
+ %define CONFIG_AUDIO_FRAME_QUEUE 0
+ %define CONFIG_AUDIODSP 0
+-%define CONFIG_BLOCKDSP 0
+-%define CONFIG_BSWAPDSP 0
++%define CONFIG_BLOCKDSP 1
++%define CONFIG_BSWAPDSP 1
+ %define CONFIG_CABAC 1
+ %define CONFIG_CBS 0
+ %define CONFIG_CBS_APV 0
+@@ -764,15 +764,15 @@
+ %define CONFIG_H264PRED 1
+ %define CONFIG_H264QPEL 1
+ %define CONFIG_H264_SEI 1
+-%define CONFIG_HEVCPARSE 0
+-%define CONFIG_HEVC_SEI 0
+-%define CONFIG_HPELDSP 0
++%define CONFIG_HEVCPARSE 1
++%define CONFIG_HEVC_SEI 1
++%define CONFIG_HPELDSP 1
+ %define CONFIG_HUFFMAN 0
+ %define CONFIG_HUFFYUVDSP 0
+ %define CONFIG_HUFFYUVENCDSP 0
+ %define CONFIG_IAMFDEC 0
+ %define CONFIG_IAMFENC 0
+-%define CONFIG_IDCTDSP 0
++%define CONFIG_IDCTDSP 1
+ %define CONFIG_INFLATE_WRAPPER 0
+ %define CONFIG_INTRAX8 0
+ %define CONFIG_ISO_MEDIA 1
+@@ -788,14 +788,14 @@
+ %define CONFIG_LLVIDENCDSP 0
+ %define CONFIG_LPC 0
+ %define CONFIG_LZF 0
+-%define CONFIG_ME_CMP 0
+-%define CONFIG_MPEG_ER 0
++%define CONFIG_ME_CMP 1
++%define CONFIG_MPEG_ER 1
+ %define CONFIG_MPEGAUDIO 1
+ %define CONFIG_MPEGAUDIODSP 1
+ %define CONFIG_MPEGAUDIOHEADER 1
+ %define CONFIG_MPEG4AUDIO 1
+-%define CONFIG_MPEGVIDEO 0
+-%define CONFIG_MPEGVIDEODEC 0
++%define CONFIG_MPEGVIDEO 1
++%define CONFIG_MPEGVIDEODEC 1
+ %define CONFIG_MPEGVIDEOENC 0
+ %define CONFIG_MPEGVIDEOENCDSP 0
+ %define CONFIG_MSMPEG4DEC 0
+diff --git a/chromium/config/Chrome/win/x64/config.h b/chromium/config/Chrome/win/x64/config.h
+index 9a76294..dbf5e7e 100644
+--- a/chromium/config/Chrome/win/x64/config.h
++++ b/chromium/config/Chrome/win/x64/config.h
+@@ -697,7 +697,7 @@
+ #define CONFIG_FFPROBE 0
+ #define CONFIG_FFMPEG 0
+ #define CONFIG_DWT 0
+-#define CONFIG_ERROR_RESILIENCE 0
++#define CONFIG_ERROR_RESILIENCE 1
+ #define CONFIG_FAAN 0
+ #define CONFIG_FAST_UNALIGNED 1
+ #define CONFIG_IAMF 0
+@@ -730,13 +730,13 @@
+ #define CONFIG_MUXERS 0
+ #define CONFIG_PROTOCOLS 0
+ #define CONFIG_AANDCTTABLES 0
+-#define CONFIG_AC3DSP 0
++#define CONFIG_AC3DSP 1
+ #define CONFIG_ADTS_HEADER 1
+ #define CONFIG_ATSC_A53 1
+ #define CONFIG_AUDIO_FRAME_QUEUE 0
+ #define CONFIG_AUDIODSP 0
+-#define CONFIG_BLOCKDSP 0
+-#define CONFIG_BSWAPDSP 0
++#define CONFIG_BLOCKDSP 1
++#define CONFIG_BSWAPDSP 1
+ #define CONFIG_CABAC 1
+ #define CONFIG_CBS 0
+ #define CONFIG_CBS_APV 0
+@@ -778,15 +778,15 @@
+ #define CONFIG_H264PRED 1
+ #define CONFIG_H264QPEL 1
+ #define CONFIG_H264_SEI 1
+-#define CONFIG_HEVCPARSE 0
+-#define CONFIG_HEVC_SEI 0
+-#define CONFIG_HPELDSP 0
++#define CONFIG_HEVCPARSE 1
++#define CONFIG_HEVC_SEI 1
++#define CONFIG_HPELDSP 1
+ #define CONFIG_HUFFMAN 0
+ #define CONFIG_HUFFYUVDSP 0
+ #define CONFIG_HUFFYUVENCDSP 0
+ #define CONFIG_IAMFDEC 0
+ #define CONFIG_IAMFENC 0
+-#define CONFIG_IDCTDSP 0
++#define CONFIG_IDCTDSP 1
+ #define CONFIG_INFLATE_WRAPPER 0
+ #define CONFIG_INTRAX8 0
+ #define CONFIG_ISO_MEDIA 1
+@@ -802,14 +802,14 @@
+ #define CONFIG_LLVIDENCDSP 0
+ #define CONFIG_LPC 0
+ #define CONFIG_LZF 0
+-#define CONFIG_ME_CMP 0
+-#define CONFIG_MPEG_ER 0
++#define CONFIG_ME_CMP 1
++#define CONFIG_MPEG_ER 1
+ #define CONFIG_MPEGAUDIO 1
+ #define CONFIG_MPEGAUDIODSP 1
+ #define CONFIG_MPEGAUDIOHEADER 1
+ #define CONFIG_MPEG4AUDIO 1
+-#define CONFIG_MPEGVIDEO 0
+-#define CONFIG_MPEGVIDEODEC 0
++#define CONFIG_MPEGVIDEO 1
++#define CONFIG_MPEGVIDEODEC 1
+ #define CONFIG_MPEGVIDEOENC 0
+ #define CONFIG_MPEGVIDEOENCDSP 0
+ #define CONFIG_MSMPEG4DEC 0
+diff --git a/chromium/config/Chrome/win/x64/config_components.asm b/chromium/config/Chrome/win/x64/config_components.asm
+index 695266e..31960dd 100644
+--- a/chromium/config/Chrome/win/x64/config_components.asm
++++ b/chromium/config/Chrome/win/x64/config_components.asm
+@@ -142,7 +142,7 @@
+ %define CONFIG_H264_QSV_DECODER 0
+ %define CONFIG_H264_RKMPP_DECODER 0
+ %define CONFIG_HAP_DECODER 0
+-%define CONFIG_HEVC_DECODER 0
++%define CONFIG_HEVC_DECODER 1
+ %define CONFIG_HEVC_QSV_DECODER 0
+ %define CONFIG_HEVC_RKMPP_DECODER 0
+ %define CONFIG_HEVC_V4L2M2M_DECODER 0
+@@ -180,8 +180,8 @@
+ %define CONFIG_MMVIDEO_DECODER 0
+ %define CONFIG_MOBICLIP_DECODER 0
+ %define CONFIG_MOTIONPIXELS_DECODER 0
+-%define CONFIG_MPEG1VIDEO_DECODER 0
+-%define CONFIG_MPEG2VIDEO_DECODER 0
++%define CONFIG_MPEG1VIDEO_DECODER 1
++%define CONFIG_MPEG2VIDEO_DECODER 1
+ %define CONFIG_MPEG4_DECODER 0
+ %define CONFIG_MPEG4_V4L2M2M_DECODER 0
+ %define CONFIG_MPEG4_MMAL_DECODER 0
+@@ -345,8 +345,8 @@
+ %define CONFIG_AAC_DECODER 1
+ %define CONFIG_AAC_FIXED_DECODER 0
+ %define CONFIG_AAC_LATM_DECODER 0
+-%define CONFIG_AC3_DECODER 0
+-%define CONFIG_AC3_FIXED_DECODER 0
++%define CONFIG_AC3_DECODER 1
++%define CONFIG_AC3_FIXED_DECODER 1
+ %define CONFIG_ACELP_KELVIN_DECODER 0
+ %define CONFIG_AHX_DECODER 0
+ %define CONFIG_ALAC_DECODER 0
+@@ -368,7 +368,7 @@
+ %define CONFIG_BMV_AUDIO_DECODER 0
+ %define CONFIG_BONK_DECODER 0
+ %define CONFIG_COOK_DECODER 0
+-%define CONFIG_DCA_DECODER 0
++%define CONFIG_DCA_DECODER 1
+ %define CONFIG_DFPWM_DECODER 0
+ %define CONFIG_DOLBY_E_DECODER 0
+ %define CONFIG_DSD_LSBF_DECODER 0
+@@ -378,7 +378,7 @@
+ %define CONFIG_DSICINAUDIO_DECODER 0
+ %define CONFIG_DSS_SP_DECODER 0
+ %define CONFIG_DST_DECODER 0
+-%define CONFIG_EAC3_DECODER 0
++%define CONFIG_EAC3_DECODER 1
+ %define CONFIG_EVRC_DECODER 0
+ %define CONFIG_FASTAUDIO_DECODER 0
+ %define CONFIG_FFWAVESYNTH_DECODER 0
+@@ -400,10 +400,10 @@
+ %define CONFIG_MACE6_DECODER 0
+ %define CONFIG_METASOUND_DECODER 0
+ %define CONFIG_MISC4_DECODER 0
+-%define CONFIG_MLP_DECODER 0
+-%define CONFIG_MP1_DECODER 0
++%define CONFIG_MLP_DECODER 1
++%define CONFIG_MP1_DECODER 1
+ %define CONFIG_MP1FLOAT_DECODER 0
+-%define CONFIG_MP2_DECODER 0
++%define CONFIG_MP2_DECODER 1
+ %define CONFIG_MP2FLOAT_DECODER 0
+ %define CONFIG_MP3FLOAT_DECODER 0
+ %define CONFIG_MP3_DECODER 1
+@@ -432,7 +432,7 @@
+ %define CONFIG_SIREN_DECODER 0
+ %define CONFIG_SMACKAUD_DECODER 0
+ %define CONFIG_TAK_DECODER 0
+-%define CONFIG_TRUEHD_DECODER 0
++%define CONFIG_TRUEHD_DECODER 1
+ %define CONFIG_TRUESPEECH_DECODER 0
+ %define CONFIG_TTA_DECODER 0
+ %define CONFIG_TWINVQ_DECODER 0
+@@ -1016,7 +1016,7 @@
+ %define CONFIG_WMV3_VDPAU_HWACCEL 0
+ %define CONFIG_AAC_PARSER 1
+ %define CONFIG_AAC_LATM_PARSER 0
+-%define CONFIG_AC3_PARSER 0
++%define CONFIG_AC3_PARSER 1
+ %define CONFIG_ADX_PARSER 0
+ %define CONFIG_AHX_PARSER 0
+ %define CONFIG_AMR_PARSER 0
+@@ -1028,7 +1028,7 @@
+ %define CONFIG_CAVSVIDEO_PARSER 0
+ %define CONFIG_COOK_PARSER 0
+ %define CONFIG_CRI_PARSER 0
+-%define CONFIG_DCA_PARSER 0
++%define CONFIG_DCA_PARSER 1
+ %define CONFIG_DIRAC_PARSER 0
+ %define CONFIG_DNXHD_PARSER 0
+ %define CONFIG_DNXUC_PARSER 0
+@@ -1049,7 +1049,7 @@
+ %define CONFIG_H261_PARSER 0
+ %define CONFIG_H263_PARSER 0
+ %define CONFIG_H264_PARSER 1
+-%define CONFIG_HEVC_PARSER 0
++%define CONFIG_HEVC_PARSER 1
+ %define CONFIG_HDR_PARSER 0
+ %define CONFIG_IPU_PARSER 0
+ %define CONFIG_JPEG2000_PARSER 0
+@@ -1058,10 +1058,10 @@
+ %define CONFIG_LCEVC_PARSER 0
+ %define CONFIG_MISC4_PARSER 0
+ %define CONFIG_MJPEG_PARSER 0
+-%define CONFIG_MLP_PARSER 0
++%define CONFIG_MLP_PARSER 1
+ %define CONFIG_MPEG4VIDEO_PARSER 0
+ %define CONFIG_MPEGAUDIO_PARSER 1
+-%define CONFIG_MPEGVIDEO_PARSER 0
++%define CONFIG_MPEGVIDEO_PARSER 1
+ %define CONFIG_OPUS_PARSER 1
+ %define CONFIG_PRORES_PARSER 0
+ %define CONFIG_PNG_PARSER 0
+@@ -1709,7 +1709,7 @@
+ %define CONFIG_AA_DEMUXER 0
+ %define CONFIG_AAC_DEMUXER 1
+ %define CONFIG_AAX_DEMUXER 0
+-%define CONFIG_AC3_DEMUXER 0
++%define CONFIG_AC3_DEMUXER 1
+ %define CONFIG_AC4_DEMUXER 0
+ %define CONFIG_ACE_DEMUXER 0
+ %define CONFIG_ACM_DEMUXER 0
+@@ -1784,15 +1784,15 @@
+ %define CONFIG_DSF_DEMUXER 0
+ %define CONFIG_DSICIN_DEMUXER 0
+ %define CONFIG_DSS_DEMUXER 0
+-%define CONFIG_DTS_DEMUXER 0
+-%define CONFIG_DTSHD_DEMUXER 0
++%define CONFIG_DTS_DEMUXER 1
++%define CONFIG_DTSHD_DEMUXER 1
+ %define CONFIG_DV_DEMUXER 0
+ %define CONFIG_DVBSUB_DEMUXER 0
+ %define CONFIG_DVBTXT_DEMUXER 0
+ %define CONFIG_DXA_DEMUXER 0
+ %define CONFIG_EA_DEMUXER 0
+ %define CONFIG_EA_CDATA_DEMUXER 0
+-%define CONFIG_EAC3_DEMUXER 0
++%define CONFIG_EAC3_DEMUXER 1
+ %define CONFIG_EPAF_DEMUXER 0
+ %define CONFIG_EVC_DEMUXER 0
+ %define CONFIG_FFMETADATA_DEMUXER 0
+@@ -1867,7 +1867,7 @@
+ %define CONFIG_MICRODVD_DEMUXER 0
+ %define CONFIG_MJPEG_DEMUXER 0
+ %define CONFIG_MJPEG_2000_DEMUXER 0
+-%define CONFIG_MLP_DEMUXER 0
++%define CONFIG_MLP_DEMUXER 1
+ %define CONFIG_MLV_DEMUXER 0
+ %define CONFIG_MM_DEMUXER 0
+ %define CONFIG_MMF_DEMUXER 0
+@@ -1877,10 +1877,10 @@
+ %define CONFIG_MP3_DEMUXER 1
+ %define CONFIG_MPC_DEMUXER 0
+ %define CONFIG_MPC8_DEMUXER 0
+-%define CONFIG_MPEGPS_DEMUXER 0
+-%define CONFIG_MPEGTS_DEMUXER 0
++%define CONFIG_MPEGPS_DEMUXER 1
++%define CONFIG_MPEGTS_DEMUXER 1
+ %define CONFIG_MPEGTSRAW_DEMUXER 0
+-%define CONFIG_MPEGVIDEO_DEMUXER 0
++%define CONFIG_MPEGVIDEO_DEMUXER 1
+ %define CONFIG_MPJPEG_DEMUXER 0
+ %define CONFIG_MPL2_DEMUXER 0
+ %define CONFIG_MPSUB_DEMUXER 0
+@@ -1989,7 +1989,7 @@
+ %define CONFIG_THREEDOSTR_DEMUXER 0
+ %define CONFIG_TIERTEXSEQ_DEMUXER 0
+ %define CONFIG_TMV_DEMUXER 0
+-%define CONFIG_TRUEHD_DEMUXER 0
++%define CONFIG_TRUEHD_DEMUXER 1
+ %define CONFIG_TTA_DEMUXER 0
+ %define CONFIG_TXD_DEMUXER 0
+ %define CONFIG_TTY_DEMUXER 0
+diff --git a/chromium/config/Chrome/win/x64/config_components.h b/chromium/config/Chrome/win/x64/config_components.h
+index 7168328..fc7abba 100644
+--- a/chromium/config/Chrome/win/x64/config_components.h
++++ b/chromium/config/Chrome/win/x64/config_components.h
+@@ -144,7 +144,7 @@
+ #define CONFIG_H264_QSV_DECODER 0
+ #define CONFIG_H264_RKMPP_DECODER 0
+ #define CONFIG_HAP_DECODER 0
+-#define CONFIG_HEVC_DECODER 0
++#define CONFIG_HEVC_DECODER 1
+ #define CONFIG_HEVC_QSV_DECODER 0
+ #define CONFIG_HEVC_RKMPP_DECODER 0
+ #define CONFIG_HEVC_V4L2M2M_DECODER 0
+@@ -182,8 +182,8 @@
+ #define CONFIG_MMVIDEO_DECODER 0
+ #define CONFIG_MOBICLIP_DECODER 0
+ #define CONFIG_MOTIONPIXELS_DECODER 0
+-#define CONFIG_MPEG1VIDEO_DECODER 0
+-#define CONFIG_MPEG2VIDEO_DECODER 0
++#define CONFIG_MPEG1VIDEO_DECODER 1
++#define CONFIG_MPEG2VIDEO_DECODER 1
+ #define CONFIG_MPEG4_DECODER 0
+ #define CONFIG_MPEG4_V4L2M2M_DECODER 0
+ #define CONFIG_MPEG4_MMAL_DECODER 0
+@@ -347,8 +347,8 @@
+ #define CONFIG_AAC_DECODER 1
+ #define CONFIG_AAC_FIXED_DECODER 0
+ #define CONFIG_AAC_LATM_DECODER 0
+-#define CONFIG_AC3_DECODER 0
+-#define CONFIG_AC3_FIXED_DECODER 0
++#define CONFIG_AC3_DECODER 1
++#define CONFIG_AC3_FIXED_DECODER 1
+ #define CONFIG_ACELP_KELVIN_DECODER 0
+ #define CONFIG_AHX_DECODER 0
+ #define CONFIG_ALAC_DECODER 0
+@@ -370,7 +370,7 @@
+ #define CONFIG_BMV_AUDIO_DECODER 0
+ #define CONFIG_BONK_DECODER 0
+ #define CONFIG_COOK_DECODER 0
+-#define CONFIG_DCA_DECODER 0
++#define CONFIG_DCA_DECODER 1
+ #define CONFIG_DFPWM_DECODER 0
+ #define CONFIG_DOLBY_E_DECODER 0
+ #define CONFIG_DSD_LSBF_DECODER 0
+@@ -380,7 +380,7 @@
+ #define CONFIG_DSICINAUDIO_DECODER 0
+ #define CONFIG_DSS_SP_DECODER 0
+ #define CONFIG_DST_DECODER 0
+-#define CONFIG_EAC3_DECODER 0
++#define CONFIG_EAC3_DECODER 1
+ #define CONFIG_EVRC_DECODER 0
+ #define CONFIG_FASTAUDIO_DECODER 0
+ #define CONFIG_FFWAVESYNTH_DECODER 0
+@@ -402,10 +402,10 @@
+ #define CONFIG_MACE6_DECODER 0
+ #define CONFIG_METASOUND_DECODER 0
+ #define CONFIG_MISC4_DECODER 0
+-#define CONFIG_MLP_DECODER 0
+-#define CONFIG_MP1_DECODER 0
++#define CONFIG_MLP_DECODER 1
++#define CONFIG_MP1_DECODER 1
+ #define CONFIG_MP1FLOAT_DECODER 0
+-#define CONFIG_MP2_DECODER 0
++#define CONFIG_MP2_DECODER 1
+ #define CONFIG_MP2FLOAT_DECODER 0
+ #define CONFIG_MP3FLOAT_DECODER 0
+ #define CONFIG_MP3_DECODER 1
+@@ -434,7 +434,7 @@
+ #define CONFIG_SIREN_DECODER 0
+ #define CONFIG_SMACKAUD_DECODER 0
+ #define CONFIG_TAK_DECODER 0
+-#define CONFIG_TRUEHD_DECODER 0
++#define CONFIG_TRUEHD_DECODER 1
+ #define CONFIG_TRUESPEECH_DECODER 0
+ #define CONFIG_TTA_DECODER 0
+ #define CONFIG_TWINVQ_DECODER 0
+@@ -1018,7 +1018,7 @@
+ #define CONFIG_WMV3_VDPAU_HWACCEL 0
+ #define CONFIG_AAC_PARSER 1
+ #define CONFIG_AAC_LATM_PARSER 0
+-#define CONFIG_AC3_PARSER 0
++#define CONFIG_AC3_PARSER 1
+ #define CONFIG_ADX_PARSER 0
+ #define CONFIG_AHX_PARSER 0
+ #define CONFIG_AMR_PARSER 0
+@@ -1030,7 +1030,7 @@
+ #define CONFIG_CAVSVIDEO_PARSER 0
+ #define CONFIG_COOK_PARSER 0
+ #define CONFIG_CRI_PARSER 0
+-#define CONFIG_DCA_PARSER 0
++#define CONFIG_DCA_PARSER 1
+ #define CONFIG_DIRAC_PARSER 0
+ #define CONFIG_DNXHD_PARSER 0
+ #define CONFIG_DNXUC_PARSER 0
+@@ -1051,7 +1051,7 @@
+ #define CONFIG_H261_PARSER 0
+ #define CONFIG_H263_PARSER 0
+ #define CONFIG_H264_PARSER 1
+-#define CONFIG_HEVC_PARSER 0
++#define CONFIG_HEVC_PARSER 1
+ #define CONFIG_HDR_PARSER 0
+ #define CONFIG_IPU_PARSER 0
+ #define CONFIG_JPEG2000_PARSER 0
+@@ -1060,10 +1060,10 @@
+ #define CONFIG_LCEVC_PARSER 0
+ #define CONFIG_MISC4_PARSER 0
+ #define CONFIG_MJPEG_PARSER 0
+-#define CONFIG_MLP_PARSER 0
++#define CONFIG_MLP_PARSER 1
+ #define CONFIG_MPEG4VIDEO_PARSER 0
+ #define CONFIG_MPEGAUDIO_PARSER 1
+-#define CONFIG_MPEGVIDEO_PARSER 0
++#define CONFIG_MPEGVIDEO_PARSER 1
+ #define CONFIG_OPUS_PARSER 1
+ #define CONFIG_PRORES_PARSER 0
+ #define CONFIG_PNG_PARSER 0
+@@ -1711,7 +1711,7 @@
+ #define CONFIG_AA_DEMUXER 0
+ #define CONFIG_AAC_DEMUXER 1
+ #define CONFIG_AAX_DEMUXER 0
+-#define CONFIG_AC3_DEMUXER 0
++#define CONFIG_AC3_DEMUXER 1
+ #define CONFIG_AC4_DEMUXER 0
+ #define CONFIG_ACE_DEMUXER 0
+ #define CONFIG_ACM_DEMUXER 0
+@@ -1786,15 +1786,15 @@
+ #define CONFIG_DSF_DEMUXER 0
+ #define CONFIG_DSICIN_DEMUXER 0
+ #define CONFIG_DSS_DEMUXER 0
+-#define CONFIG_DTS_DEMUXER 0
+-#define CONFIG_DTSHD_DEMUXER 0
++#define CONFIG_DTS_DEMUXER 1
++#define CONFIG_DTSHD_DEMUXER 1
+ #define CONFIG_DV_DEMUXER 0
+ #define CONFIG_DVBSUB_DEMUXER 0
+ #define CONFIG_DVBTXT_DEMUXER 0
+ #define CONFIG_DXA_DEMUXER 0
+ #define CONFIG_EA_DEMUXER 0
+ #define CONFIG_EA_CDATA_DEMUXER 0
+-#define CONFIG_EAC3_DEMUXER 0
++#define CONFIG_EAC3_DEMUXER 1
+ #define CONFIG_EPAF_DEMUXER 0
+ #define CONFIG_EVC_DEMUXER 0
+ #define CONFIG_FFMETADATA_DEMUXER 0
+@@ -1869,7 +1869,7 @@
+ #define CONFIG_MICRODVD_DEMUXER 0
+ #define CONFIG_MJPEG_DEMUXER 0
+ #define CONFIG_MJPEG_2000_DEMUXER 0
+-#define CONFIG_MLP_DEMUXER 0
++#define CONFIG_MLP_DEMUXER 1
+ #define CONFIG_MLV_DEMUXER 0
+ #define CONFIG_MM_DEMUXER 0
+ #define CONFIG_MMF_DEMUXER 0
+@@ -1879,10 +1879,10 @@
+ #define CONFIG_MP3_DEMUXER 1
+ #define CONFIG_MPC_DEMUXER 0
+ #define CONFIG_MPC8_DEMUXER 0
+-#define CONFIG_MPEGPS_DEMUXER 0
+-#define CONFIG_MPEGTS_DEMUXER 0
++#define CONFIG_MPEGPS_DEMUXER 1
++#define CONFIG_MPEGTS_DEMUXER 1
+ #define CONFIG_MPEGTSRAW_DEMUXER 0
+-#define CONFIG_MPEGVIDEO_DEMUXER 0
++#define CONFIG_MPEGVIDEO_DEMUXER 1
+ #define CONFIG_MPJPEG_DEMUXER 0
+ #define CONFIG_MPL2_DEMUXER 0
+ #define CONFIG_MPSUB_DEMUXER 0
+@@ -1991,7 +1991,7 @@
+ #define CONFIG_THREEDOSTR_DEMUXER 0
+ #define CONFIG_TIERTEXSEQ_DEMUXER 0
+ #define CONFIG_TMV_DEMUXER 0
+-#define CONFIG_TRUEHD_DEMUXER 0
++#define CONFIG_TRUEHD_DEMUXER 1
+ #define CONFIG_TTA_DEMUXER 0
+ #define CONFIG_TXD_DEMUXER 0
+ #define CONFIG_TTY_DEMUXER 0
+diff --git a/chromium/config/Chrome/win/x64/libavcodec/codec_list.c b/chromium/config/Chrome/win/x64/libavcodec/codec_list.c
+index fe5adb0..66170c5 100644
+--- a/chromium/config/Chrome/win/x64/libavcodec/codec_list.c
++++ b/chromium/config/Chrome/win/x64/libavcodec/codec_list.c
+@@ -14,4 +14,15 @@ static const FFCodec * const codec_list[] = {
+     &ff_pcm_s32le_decoder,
+     &ff_pcm_u8_decoder,
+     &ff_libopus_decoder,
++    &ff_hevc_decoder,
++    &ff_ac3_decoder,
++    &ff_eac3_decoder,
++    &ff_ac3_fixed_decoder,
++    &ff_dca_decoder,
++    &ff_truehd_decoder,
++    &ff_mlp_decoder,
++    &ff_mpeg2video_decoder,
++    &ff_mpeg1video_decoder,
++    &ff_mp2_decoder,
++    &ff_mp1_decoder,
+     NULL };
+diff --git a/chromium/config/Chrome/win/x64/libavcodec/parser_list.c b/chromium/config/Chrome/win/x64/libavcodec/parser_list.c
+index e3684b3..c057540 100644
+--- a/chromium/config/Chrome/win/x64/libavcodec/parser_list.c
++++ b/chromium/config/Chrome/win/x64/libavcodec/parser_list.c
+@@ -6,4 +6,9 @@ static const FFCodecParser * const parser_list[] = {
+     &ff_opus_parser,
+     &ff_vorbis_parser,
+     &ff_vp9_parser,
++    &ff_hevc_parser,
++    &ff_ac3_parser,
++    &ff_dca_parser,
++    &ff_mlp_parser,
++    &ff_mpegvideo_parser,
+     NULL };
+diff --git a/chromium/config/Chrome/win/x64/libavformat/demuxer_list.c b/chromium/config/Chrome/win/x64/libavformat/demuxer_list.c
+index 29f1f59..39ce7fc 100644
+--- a/chromium/config/Chrome/win/x64/libavformat/demuxer_list.c
++++ b/chromium/config/Chrome/win/x64/libavformat/demuxer_list.c
+@@ -6,4 +6,13 @@ static const FFInputFormat * const demuxer_list[] = {
+     &ff_mp3_demuxer,
+     &ff_ogg_demuxer,
+     &ff_wav_demuxer,
++    &ff_ac3_demuxer,
++    &ff_eac3_demuxer,
++    &ff_dts_demuxer,
++    &ff_dtshd_demuxer,
++    &ff_truehd_demuxer,
++    &ff_mlp_demuxer,
++    &ff_mpegps_demuxer,
++    &ff_mpegvideo_demuxer,
++    &ff_mpegts_demuxer,
+     NULL };
+diff --git a/ffmpeg_generated.gni b/ffmpeg_generated.gni
+index 6dd28da..5e175e1 100644
+--- a/ffmpeg_generated.gni
++++ b/ffmpeg_generated.gni
+@@ -597,3 +597,143 @@ if ((is_android && (current_cpu == "arm64" || current_cpu == "arm64e")) ||
+     (is_android && current_cpu == "x86")) {
+   ffmpeg_c_sources += [ "compat/strtod.c" ]
+ }
++
++if (ffmpeg_branding == "Chrome" &&
++    ((current_cpu == "x64" &&
++      (os_config == "win" || os_config == "mac" || os_config == "linux")) ||
++     (os_config == "mac" &&
++      (current_cpu == "arm64" || current_cpu == "arm64e")))) {
++  ffmpeg_c_sources += [
++    "libavcodec/ac3.c",
++    "libavcodec/ac3dec_data.c",
++    "libavcodec/ac3dec_fixed.c",
++    "libavcodec/ac3dec_float.c",
++    "libavcodec/ac3dsp.c",
++    "libavcodec/ac3tab.c",
++    "libavcodec/blockdsp.c",
++    "libavcodec/bswapdsp.c",
++    "libavcodec/dca.c",
++    "libavcodec/dca_core.c",
++    "libavcodec/dca_exss.c",
++    "libavcodec/dca_lbr.c",
++    "libavcodec/dca_parser.c",
++    "libavcodec/dca_sample_rate_tab.c",
++    "libavcodec/dca_xll.c",
++    "libavcodec/dcadata.c",
++    "libavcodec/dcadct.c",
++    "libavcodec/dcadec.c",
++    "libavcodec/dcadsp.c",
++    "libavcodec/dcahuff.c",
++    "libavcodec/eac3_data.c",
++    "libavcodec/eac3dec.c",
++    "libavcodec/error_resilience.c",
++    "libavcodec/hevc/autorename_libavcodec_hevc_cabac.c",
++    "libavcodec/hevc/autorename_libavcodec_hevc_parse.c",
++    "libavcodec/hevc/autorename_libavcodec_hevc_parser.c",
++    "libavcodec/hevc/data.c",
++    "libavcodec/hevc/dsp.c",
++    "libavcodec/hevc/filter.c",
++    "libavcodec/hevc/hevcdec.c",
++    "libavcodec/hevc/mvs.c",
++    "libavcodec/hevc/pred.c",
++    "libavcodec/hevc/ps.c",
++    "libavcodec/hevc/refs.c",
++    "libavcodec/hevc/sei.c",
++    "libavcodec/hpeldsp.c",
++    "libavcodec/idctdsp.c",
++    "libavcodec/jrevdct.c",
++    "libavcodec/me_cmp.c",
++    "libavcodec/mlp.c",
++    "libavcodec/mlp_parse.c",
++    "libavcodec/mlp_parser.c",
++    "libavcodec/mlpdec.c",
++    "libavcodec/mlpdsp.c",
++    "libavcodec/mpeg12.c",
++    "libavcodec/mpeg12data.c",
++    "libavcodec/mpeg12dec.c",
++    "libavcodec/mpeg_er.c",
++    "libavcodec/mpegpicture.c",
++    "libavcodec/mpegutils.c",
++    "libavcodec/mpegvideo.c",
++    "libavcodec/mpegvideo_dec.c",
++    "libavcodec/mpegvideo_motion.c",
++    "libavcodec/mpegvideo_parser.c",
++    "libavcodec/mpegvideo_unquantize.c",
++    "libavcodec/mpegvideodata.c",
++    "libavcodec/rl.c",
++    "libavcodec/simple_idct.c",
++    "libavcodec/synth_filter.c",
++    "libavformat/ac3dec.c",
++    "libavformat/autorename_libavformat_mlpdec.c",
++    "libavformat/dtsdec.c",
++    "libavformat/dtshddec.c",
++    "libavformat/mpeg.c",
++    "libavformat/mpegts.c",
++    "libavformat/mpegvideodec.c",
++  ]
++  if (current_cpu == "x64") {
++    ffmpeg_c_sources += [
++      "libavcodec/x86/ac3dsp_init.c",
++      "libavcodec/x86/autorename_libavcodec_x86_mpegvideo.c",
++      "libavcodec/x86/blockdsp_init.c",
++      "libavcodec/x86/bswapdsp_init.c",
++      "libavcodec/x86/dcadsp_init.c",
++      "libavcodec/x86/h26x/h2656dsp.c",
++      "libavcodec/x86/hevc/dsp_init.c",
++      "libavcodec/x86/hpeldsp_init.c",
++      "libavcodec/x86/idctdsp_init.c",
++      "libavcodec/x86/me_cmp_init.c",
++      "libavcodec/x86/mlpdsp_init.c",
++      "libavcodec/x86/synth_filter_init.c",
++    ]
++    ffmpeg_asm_sources += [
++      "libavcodec/x86/ac3dsp.asm",
++      "libavcodec/x86/ac3dsp_downmix.asm",
++      "libavcodec/x86/blockdsp.asm",
++      "libavcodec/x86/bswapdsp.asm",
++      "libavcodec/x86/dcadsp.asm",
++      "libavcodec/x86/h26x/h2656_inter.asm",
++      "libavcodec/x86/hevc/add_res.asm",
++      "libavcodec/x86/hevc/deblock.asm",
++      "libavcodec/x86/hevc/dequant.asm",
++      "libavcodec/x86/hevc/idct.asm",
++      "libavcodec/x86/hevc/mc.asm",
++      "libavcodec/x86/hevc/sao.asm",
++      "libavcodec/x86/hevc/sao_10bit.asm",
++      "libavcodec/x86/hpeldsp.asm",
++      "libavcodec/x86/idctdsp.asm",
++      "libavcodec/x86/me_cmp.asm",
++      "libavcodec/x86/mlpdsp.asm",
++      "libavcodec/x86/simple_idct.asm",
++      "libavcodec/x86/simple_idct10.asm",
++      "libavcodec/x86/synth_filter.asm",
++    ]
++  }
++  if (current_cpu == "arm64" || current_cpu == "arm64e") {
++    ffmpeg_c_sources += [
++      "libavcodec/aarch64/ac3dsp_init_aarch64.c",
++      "libavcodec/aarch64/dcadsp_init_aarch64.c",
++      "libavcodec/aarch64/hevcdsp_init_aarch64.c",
++      "libavcodec/aarch64/hevcpred_init_aarch64.c",
++      "libavcodec/aarch64/hpeldsp_init_aarch64.c",
++      "libavcodec/aarch64/idctdsp_init_aarch64.c",
++      "libavcodec/aarch64/me_cmp_init_aarch64.c",
++      "libavcodec/aarch64/synth_filter_init.c",
++    ]
++    ffmpeg_gas_sources += [
++      "libavcodec/aarch64/ac3dsp_neon.S",
++      "libavcodec/aarch64/autorename_libavcodec_aarch64_hevcdsp_idct_neon.S",
++      "libavcodec/aarch64/dcadsp_neon.S",
++      "libavcodec/aarch64/h26x/epel_neon.S",
++      "libavcodec/aarch64/h26x/qpel_neon.S",
++      "libavcodec/aarch64/h26x/sao_neon.S",
++      "libavcodec/aarch64/hevcdsp_deblock_neon.S",
++      "libavcodec/aarch64/hevcdsp_dequant_neon.S",
++      "libavcodec/aarch64/hevcpred_neon.S",
++      "libavcodec/aarch64/idctdsp_neon.S",
++      "libavcodec/aarch64/me_cmp_neon.S",
++      "libavcodec/aarch64/simple_idct_neon.S",
++      "libavcodec/aarch64/synth_filter_neon.S",
++    ]
++  }
++}
+diff --git a/libavcodec/aarch64/autorename_libavcodec_aarch64_hevcdsp_idct_neon.S b/libavcodec/aarch64/autorename_libavcodec_aarch64_hevcdsp_idct_neon.S
+new file mode 100644
+index 0000000..ca94aa3
+--- /dev/null
++++ b/libavcodec/aarch64/autorename_libavcodec_aarch64_hevcdsp_idct_neon.S
+@@ -0,0 +1,2 @@
++// File automatically generated. See crbug.com/495833.
++#include "hevcdsp_idct_neon.S"
+diff --git a/libavcodec/hevc/autorename_libavcodec_hevc_cabac.c b/libavcodec/hevc/autorename_libavcodec_hevc_cabac.c
+new file mode 100644
+index 0000000..02c7e29
+--- /dev/null
++++ b/libavcodec/hevc/autorename_libavcodec_hevc_cabac.c
+@@ -0,0 +1,2 @@
++// File automatically generated. See crbug.com/495833.
++#include "cabac.c"
+diff --git a/libavcodec/hevc/autorename_libavcodec_hevc_parse.c b/libavcodec/hevc/autorename_libavcodec_hevc_parse.c
+new file mode 100644
+index 0000000..bbe1320
+--- /dev/null
++++ b/libavcodec/hevc/autorename_libavcodec_hevc_parse.c
+@@ -0,0 +1,2 @@
++// File automatically generated. See crbug.com/495833.
++#include "parse.c"
+diff --git a/libavcodec/hevc/autorename_libavcodec_hevc_parser.c b/libavcodec/hevc/autorename_libavcodec_hevc_parser.c
+new file mode 100644
+index 0000000..b7b796f
+--- /dev/null
++++ b/libavcodec/hevc/autorename_libavcodec_hevc_parser.c
+@@ -0,0 +1,2 @@
++// File automatically generated. See crbug.com/495833.
++#include "parser.c"
+diff --git a/libavcodec/x86/autorename_libavcodec_x86_mpegvideo.c b/libavcodec/x86/autorename_libavcodec_x86_mpegvideo.c
+new file mode 100644
+index 0000000..72be6b7
+--- /dev/null
++++ b/libavcodec/x86/autorename_libavcodec_x86_mpegvideo.c
+@@ -0,0 +1,2 @@
++// File automatically generated. See crbug.com/495833.
++#include "mpegvideo.c"
+diff --git a/libavcodec/x86/mlpdsp_init.c b/libavcodec/x86/mlpdsp_init.c
+index 38b7bc4..a2de008 100644
+--- a/libavcodec/x86/mlpdsp_init.c
++++ b/libavcodec/x86/mlpdsp_init.c
+@@ -45,7 +45,7 @@ void ff_mlp_rematrix_channel_##opt(int32_t *samples, \
+ REMATRIX_CHANNEL_FUNC(sse4)
+ REMATRIX_CHANNEL_FUNC(avx2_bmi2)
+ 
+-#if HAVE_X86_7REGS && HAVE_INLINE_ASM && HAVE_INLINE_ASM_NONLOCAL_LABELS
++#if HAVE_X86_7REGS && HAVE_INLINE_ASM && HAVE_INLINE_ASM_NONLOCAL_LABELS && !defined(__clang__)
+ 
+ extern char ff_mlp_firorder_8;
+ extern char ff_mlp_firorder_7;
+@@ -196,7 +196,7 @@ static void mlp_filter_channel_x86(int32_t *state, const int32_t *coeff,
+ av_cold void ff_mlpdsp_init_x86(MLPDSPContext *c)
+ {
+     int cpu_flags = av_get_cpu_flags();
+-#if HAVE_X86_7REGS && HAVE_INLINE_ASM && HAVE_INLINE_ASM_NONLOCAL_LABELS
++#if HAVE_X86_7REGS && HAVE_INLINE_ASM && HAVE_INLINE_ASM_NONLOCAL_LABELS && !defined(__clang__)
+     if (INLINE_MMX(cpu_flags))
+         c->mlp_filter_channel = mlp_filter_channel_x86;
+ #endif
+diff --git a/libavformat/autorename_libavformat_mlpdec.c b/libavformat/autorename_libavformat_mlpdec.c
+new file mode 100644
+index 0000000..dbb3162
+--- /dev/null
++++ b/libavformat/autorename_libavformat_mlpdec.c
+@@ -0,0 +1,2 @@
++// File automatically generated. See crbug.com/495833.
++#include "mlpdec.c"
